@@ -9,4 +9,7 @@ class DashboardController extends Controller {
     public function register() {
         return view("guest.register");
     }
+    public function home() {
+        return view("home");
+    }
 }
