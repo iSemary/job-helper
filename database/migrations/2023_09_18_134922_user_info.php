@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('job_title', 255)->nullable();
             $table->tinyInteger('total_experience_years')->default(0);
             $table->boolean('looking_for_relocation')->default(1);
+            $table->resume('resume', 255)->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration {
      * Reverse the migrations.
      */
     public function down(): void {
-        //
+        Schema::dropIfExists('user_info');
     }
 };

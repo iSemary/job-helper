@@ -34,14 +34,17 @@
             <ul class="navbar-nav float-end">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"  href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="ms-2 d-none d-lg-inline-block"><span>Hello,</span> <span class="text-dark">
+                        <span class="ms-2 d-none d-lg-inline-block"><span><i class="fas fa-user-circle"></i> Hello,</span> <span class="text-dark">
                                 {{ auth()->user()->name }}
                             </span>
                         </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end dropdown-menu-right user-dd animated flipInY">
-                        <a class="dropdown-item page-switcher" href="#" data-switch-target="{{ route("panel.user.profile") }}">
-                            <i class="fas fa-user-circle"></i> My Profile
+                        <a class="dropdown-item page-switcher" href="#" data-switch-target="{{ route("panel.user.profile.edit") }}">
+                            <i class="fas fa-user-cog"></i> My Profile
+                        </a>
+                        <a class="dropdown-item page-switcher" href="#" data-switch-target="{{ route("panel.user.email-credentials.edit") }}">
+                            <i class="fas fa-fingerprint"></i> Email Credentials
                         </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ route('auth.logout') }}">

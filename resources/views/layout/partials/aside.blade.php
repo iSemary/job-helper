@@ -4,15 +4,15 @@
         <nav class="sidebar-nav pt-0">
             <ul id="sidebarnav" class="in">
                 <li class="sidebar-item {{ Request::url() == route('panel.home') ? 'selected' : '' }}">
-                    <a class="sidebar-link sidebar-link {{ Request::url() == route('panel.home') ? 'active' : '' }} page-switcher"
+                    <a class="sidebar-link sidebar-link page-switcher"
                         data-switch-target="{{ route('panel.home') }}" href="#" aria-expanded="false">
                         <span class="hide-menu">Dashboard</span>
                     </a>
                 </li>
                 <li class="list-divider"></li>
                 <li class="nav-small-cap"><span class="hide-menu">Applications</span></li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="ticket-list.html" aria-expanded="false">
+                <li class="sidebar-item {{ Request::url() == route('panel.apply') ? 'selected' : '' }}">
+                    <a class="sidebar-link page-switcher" data-switch-target="{{ route('panel.apply') }}" href="#" aria-expanded="false">
                         <span class="hide-menu">
                             <i class="fas fa-paper-plane"></i> Apply
                         </span>

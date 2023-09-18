@@ -8,7 +8,6 @@ $(document).on("click", ".page-switcher", function (e) {
     let linkTag = $(this);
     let page = linkTag.attr("data-switch-target");
     let sideBarItem = linkTag.parent(".sidebar-item");
-
     let targetDiv = $("#content");
     targetDiv.addClass("loading");
 
@@ -20,9 +19,9 @@ $(document).on("click", ".page-switcher", function (e) {
             dataType: "html",
             success: function (data) {
                 targetDiv.html(data);
-                linkTag.addClass("active");
                 targetDiv.removeClass("loading");
                 history.pushState({ page: page }, null, page);
+                linkTag.addClass("active");
                 if (sideBarItem) {
                     removeSelectorFromSideBars();
                     sideBarItem.addClass("selected");
@@ -60,7 +59,6 @@ $(".toggle-sidebar").click(function (e) {
         $(".left-sidebar").css("width", "260px");
     }
 });
-
 
 $(document).on("submit", "#editForm", function (e) {
     e.preventDefault();
@@ -101,3 +99,38 @@ $(document).on("submit", "#editForm", function (e) {
         },
     });
 });
+
+// PDF Loader
+
+// Function to load and display the PDF
+function loadPDF(pdfUrl, viewElementId) {
+    // Initialize PDF.js
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "/assets/plugins/pdfjs/js/worker.min.js";
+
+    // Fetch the PDF document
+    pdfjsLib.getDocument(pdfUrl).promise.then(function (pdfDocument) {
+        // Set up a loop to render each page
+        for (let pageNum = 1; pageNum <= pdfDocument.numPages; pageNum++) {
+            pdfDocument.getPage(pageNum).then(function (pdfPage) {
+                // Create a canvas element to render the page
+                var canvas = document.createElement("canvas");
+                canvas.id = "page-" + pageNum;
+
+                // Append the canvas to the PDF viewer container
+                document.getElementById(viewElementId).appendChild(canvas);
+
+                // Set the canvas size to match the PDF page size
+                var viewport = pdfPage.getViewport({ scale: 1.0 });
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+
+                // Render the PDF page on the canvas
+                pdfPage.render({
+                    canvasContext: canvas.getContext("2d"),
+                    viewport: viewport,
+                });
+            });
+        }
+    });
+}

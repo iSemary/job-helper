@@ -18,6 +18,7 @@
         <link href="{{ asset('assets/plugins/DataTables/datatables.min.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/plugins/select2/select2.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('assets/plugins/pdfjs/css/pdfjs.min.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/plugins/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
     @endauth
     <!-- Custom CSS -->
@@ -54,6 +55,7 @@
         <script src="{{ asset('assets/plugins/select2/select2.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/DataTables/datatables.min.js') }}"></script>
+        <script src="{{ asset('assets/plugins/pdfjs/js/pdfjs.min.js') }}"></script>
         <script src="{{ asset('assets/js/app.js') }}"></script>
     @endauth
     <script src="{{ asset('assets/js/custom.js') }}"></script>

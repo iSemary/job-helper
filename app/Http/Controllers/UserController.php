@@ -4,14 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
+use App\Helpers\Uploader;
 
 class UserController extends Controller {
     public function edit() {
         $userInfo = [];
         $userInfo = UserInfo::where('user_id', auth()->user()->id)->first();
-        return view("panel.user", compact('userInfo'));
+        return view("panel.user.info", compact('userInfo'));
     }
-    
+
     public function update(Request $request) {
         // Validate the input data
         $validatedData = $request->validate([
@@ -32,7 +33,11 @@ class UserController extends Controller {
             $userInfo = new UserInfo();
             $userInfo->user_id = $userId;
         }
-
+        // Check if resume is uploaded
+        $resume = $userInfo->resume;
+        if($request->file('resume')) {
+        $resume = Uploader::file($request->file('resume'), $userInfo, 'resume', 'user/resume', false);
+        }
         // Update the user info with the validated data
         $userInfo->first_name = $validatedData['first_name'];
         $userInfo->last_name = $validatedData['last_name'];
@@ -42,6 +47,7 @@ class UserController extends Controller {
         $userInfo->job_title = $validatedData['job_title'];
         $userInfo->total_experience_years = $validatedData['total_experience_years'];
         $userInfo->looking_for_relocation = isset($request['looking_for_relocation']) ? 1 : 0;
+        $userInfo->resume = $resume;
 
         // Save the user info to the database
         $userInfo->save();
