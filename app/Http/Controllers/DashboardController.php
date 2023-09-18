@@ -10,6 +10,6 @@ class DashboardController extends Controller {
         return view("guest.register");
     }
     public function home() {
-        return view("home");
+        return view("panel.home");
     }
 }

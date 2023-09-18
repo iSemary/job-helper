@@ -1,0 +1,19 @@
+.container-fluid {
+    position: relative;
+}
+
+.loading::before {
+    content: "";
+    position: absolute;
+    background-image: url("../images/loader.gif");
+    width: 64px;
+    height: 64px;
+    z-index: 1;
+    background-repeat: no-repeat;
+    margin: 0 auto;
+    right: 50%;
+    top: 35vh;
+}
+.sidebar-link.active, .sidebar-link.active > span, .sidebar-link.active > span i, .sidebar-link.active > span i.fas {
+    color: #7574ea !important;
+}
