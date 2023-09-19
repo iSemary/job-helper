@@ -254,21 +254,7 @@
             });
         });
 
-        // Switch status to warning
-        function switchWarningStatus(elementId) {
-            $(elementId).addClass('text-warning').removeClass('text-success');
-            $(elementId).find('i').addClass('fa-exclamation-triangle').removeClass('fa-check-circle');
-        }
-        // Switch status to success
-        function switchSuccessStatus(elementId) {
-            $(elementId).addClass('text-success').removeClass('text-warning');
-            $(elementId).find('i').addClass('fa-check-circle').removeClass('fa-exclamation-triangle');
-        }
-
-
         // Generate cover letter
-
-
         function generateCoverLetter(companyId, companyName, jobTitle, jobDescription, fileName) {
 
 

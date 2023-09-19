@@ -37,3 +37,8 @@
     cursor: pointer;
     
 }
+
+#resumeViewer, #fileViewer {
+    text-align: center;
+    background-color: #ebebeb;
+}

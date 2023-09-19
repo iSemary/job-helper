@@ -46,6 +46,7 @@
         </div>
     </div>
     @include('layout.modals.open')
+    @include('layout.modals.file')
     <script src="{{ asset('assets/plugins/jquery/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/bootstrap/bootstrap.bundle.min.js') }}"></script>

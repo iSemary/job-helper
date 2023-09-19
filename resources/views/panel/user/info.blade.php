@@ -45,7 +45,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-6">
+                        <div class="form-group col-4">
                             <label for="total_experience_years"><i class="fas fa-clock"></i> Total Experience
                                 (years)</label>
                             <select class="form-control" name="total_experience_years" id="total_experience_years">
@@ -56,8 +56,8 @@
                                 ?>
                             </select>
                         </div>
-                        <div class="form-group col-6">
-                            <label for="resumeFile">Resume / CV</label>
+                        <div class="form-group col-4">
+                            <label for="resumeFile">Resume / CV</label><br/>
                             <input type="file" name="resume" accept=".pdf,.doc,.docx" id="resumeFile">
                         </div>
                     </div>
@@ -76,9 +76,9 @@
                 </form>
             </div>
             <div class="card-footer">
-                <h5 class="text-center">Resume/CV Viewer</h5>
+                <h5 class="text-center"><i class="far fa-file-pdf"></i> Resume/CV Viewer</h5>
                 <hr>
-                <div class="resume-viewer" id="resumeViewer" data-url="{{ $userInfo['resume']??'' }}">
+                <div class="resume-viewer pt-2" id="resumeViewer" data-url="{{ $userInfo['resume']??'' }}">
                 </div>
             </div>
         </div>

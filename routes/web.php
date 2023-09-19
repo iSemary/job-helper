@@ -30,6 +30,8 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('email-credentials/edit', [EmailCredentialController::class, 'edit'])->name('email-credentials.edit');
             Route::post('email-credentials/update', [EmailCredentialController::class, 'update'])->name('email-credentials.update');
+            Route::post('email-credentials/test',  [EmailCredentialController::class, 'test'])->name('email-credentials.test');
+       
         });
 
         Route::get('companies/excel', [CompanyController::class, "importExcel"])->name('companies.excel.import');

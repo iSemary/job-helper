@@ -58,7 +58,15 @@
                         </div>
                     </div>
                     <div class="edit-status mt-2"></div>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <div>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
+                    </div>
+                </form>
+                <form method="POST" class="mt-2" id="testMailForm"
+                    action="{{ route('panel.user.email-credentials.test') }}">
+                    @csrf
+                    {{ method_field('POST') }}
+                    <button type="submit" class="btn btn-danger"><i class="fas fa-vial"></i> Send Test Mail</button>
                 </form>
             </div>
         </div>
@@ -66,5 +74,44 @@
 @endsection
 
 @push('extra-scripts')
-    <script></script>
+    <script>
+        $(document).on("submit", "#testMailForm", function(e) {
+            e.preventDefault();
+
+            let formBtn = $(this).find(":submit");
+            let formData = new FormData(this);
+            let formID = "#" + $(this).attr("id");
+            let formUrl = $(this).attr("action");
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: formUrl,
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                beforeSend: function() {
+                    $(".edit-status").html(
+                        `<h6 class="text-muted"><i class="fas fa-circle-notch fa-spin"></i> Sending test mail, Please wait...</h6>`
+                    );
+                    formBtn.prop("disabled", true);
+                },
+                success: function(data) {
+                    $(".edit-status").html(
+                        `<h6 class="text-success"><i class="fas fa-check-circle"></i> ${data.message}</h6>`
+                    );
+                    formBtn.prop("disabled", false);
+                },
+                error: function(data) {
+                    $(".edit-status").html(
+                        `<h6 class="text-danger"><i class="fas fa-exclamation-triangle"></i> ` +
+                        (data.responseJSON.message ?? "Something went wrong") +
+                        `</h6>`
+                    );
+                    formBtn.prop("disabled", false);
+                },
+            });
+        });
+    </script>
 @endpush

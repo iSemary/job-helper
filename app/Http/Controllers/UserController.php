@@ -35,8 +35,10 @@ class UserController extends Controller {
         }
         // Check if resume is uploaded
         $resume = $userInfo->resume;
-        if($request->file('resume')) {
-        $resume = Uploader::file($request->file('resume'), $userInfo, 'resume', 'user/resume', false);
+        $resumeFileName = $userInfo->resume_file_name;
+        if ($request->file('resume')) {
+            $resume = Uploader::file($request->file('resume'), $userInfo, 'resume', 'user/resume', false);
+            $resumeFileName = $request->file('resume')->getClientOriginalName();
         }
         // Update the user info with the validated data
         $userInfo->first_name = $validatedData['first_name'];
@@ -48,6 +50,7 @@ class UserController extends Controller {
         $userInfo->total_experience_years = $validatedData['total_experience_years'];
         $userInfo->looking_for_relocation = isset($request['looking_for_relocation']) ? 1 : 0;
         $userInfo->resume = $resume;
+        $userInfo->resume_file_name = $resumeFileName;
 
         // Save the user info to the database
         $userInfo->save();

@@ -45,7 +45,7 @@ return [
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
         ],
-
+        'custom' => [],
         'ses' => [
             'transport' => 'ses',
         ],

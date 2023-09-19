@@ -285,7 +285,7 @@ function deleteRow(link, type) {
                 })
                 .fail(function (data) {
                     Swal.fire({
-                        text: data.message, 
+                        text: data.message,
                         type: "error",
                         toast: true,
                         position: "bottom",
@@ -298,4 +298,32 @@ function deleteRow(link, type) {
 $(document).on("click", ".delete-btn", function (event) {
     event.preventDefault();
     deleteRow($(this).attr("data-url"), $(this).attr("data-delete-type"));
+});
+
+// Switch status to warning
+function switchWarningStatus(elementId) {
+    $(elementId).addClass("text-warning").removeClass("text-success");
+    $(elementId)
+        .find("i")
+        .addClass("fa-exclamation-triangle")
+        .removeClass("fa-check-circle");
+}
+// Switch status to success
+function switchSuccessStatus(elementId) {
+    $(elementId).addClass("text-success").removeClass("text-warning");
+    $(elementId)
+        .find("i")
+        .addClass("fa-check-circle")
+        .removeClass("fa-exclamation-triangle");
+}
+
+// view file modal
+$(document).ready(function () {
+    $(document).on("click", ".view-file", function (e) {
+        e.preventDefault();
+        var fileUrl = $(this).data("file-url");
+        $("#fileViewerFrame").attr("src", fileUrl);
+        loadPDF(fileUrl, "fileViewer");
+        $("#viewFileModal").modal("show");
+    });
 });
