@@ -31,11 +31,17 @@ Route::middleware(['auth'])->group(function () {
             Route::get('email-credentials/edit', [EmailCredentialController::class, 'edit'])->name('email-credentials.edit');
             Route::post('email-credentials/update', [EmailCredentialController::class, 'update'])->name('email-credentials.update');
         });
+
+        Route::get('companies/excel', [CompanyController::class, "importExcel"])->name('companies.excel.import');
+        Route::post('companies/excel/store', [CompanyController::class, "storeExcel"])->name('companies.excel.store');
         Route::resources(['companies' => CompanyController::class]);
 
         Route::prefix('generator')->name('generator.')->group(function () {
             Route::get('cover-letter', [GeneratorController::class, "coverLetter"])->name('cover-letter');
             Route::get('motivation-message', [GeneratorController::class, "motivationMessage"])->name('motivation-message');
+            Route::get('company', [GeneratorController::class, 'company'])->name('company');
+
+            Route::post("cover-letter/pdf", [GeneratorController::class, "downloadCoverLetter"])->name("cover-letter.download");
         });
 
         Route::get('apply', [EmailController::class, 'index'])->name('apply');

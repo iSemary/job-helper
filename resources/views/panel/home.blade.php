@@ -1,5 +1,4 @@
 @extends('layout.switcher')
 @section('switcher')
-HOME
+    HOME
 @endsection
-

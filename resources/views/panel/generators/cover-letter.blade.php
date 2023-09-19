@@ -14,14 +14,25 @@
                 </div>
             </div>
             <div class="col-4">
+                <div class="company-selector mb-2">
+                    <select name="company_id" class="form-control" id="companySelector">
+                        <option value="">Select Company</option>
+                        @foreach ($companies as $company)
+                            <option value="{{ $company->id }}"
+                                data-route-url="{{ route('panel.companies.show', $company->id) }}">{{ $company->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <hr>
                 <div>
                     <div class="row w-100 mx-0 px-0">
                         <button class="btn btn-sm btn-danger col-2" id="clearInputs" type="button">Clear</button>
-                        <button class="btn btn-sm btn-success col-4" disabled id="downloadFile" type="button">Download</button>
-                        <button class="btn btn-sm btn-purple col-6" disabled id="generateCoverLetter" type="button"><i
+                        <button class="btn btn-sm btn-success col-4" disabled id="downloadFile"
+                            type="button">Download</button>
+                        <button class="btn btn-sm btn-purple col-6" id="generateCoverLetter" type="button"><i
                                 class="fas fa-magic"></i> Generate</button>
                     </div>
-
                 </div>
                 <div class="my-2">
                     <button class="btn btn-sm btn-outline-info w-100" type="button" data-toggle="collapse"
@@ -80,16 +91,18 @@
                     <h5 class="text-dark"><i class="fas fa-info-circle"></i> Cover Letter Status</h5>
                     <ul class="form-status">
                         <li class="text-{{ $userInfo ? 'success' : 'warning' }}"><i
-                                class="fas fa-{{ $userInfo ? 'check-circle' : 'exclamation-triangle' }}"></i> Your Info</li>
-                        <li class="text-warning" id="jobTitleStatus"><i class="fas fa-exclamation-triangle"></i> Job Title
+                                class="fas fa-{{ $userInfo ? 'check-circle' : 'exclamation-triangle' }}"></i> Your Info
+                        </li>
+                        <li class="text-warning" id="companyNameStatus"><i class="fas fa-exclamation-triangle"></i>
+                            Company Name</li>
+                        <li class="text-warning" id="jobTitleStatus"><i class="fas fa-exclamation-triangle"></i> Job
+                            Title
                         </li>
                         <li class="text-warning" id="fileNameStatus"><i class="fas fa-exclamation-triangle"></i> File
                             Name
                         </li>
                         <li class="text-warning" id="jobDescriptionStatus"><i class="fas fa-exclamation-triangle"></i>
                             Job Description</li>
-                        <li class="text-warning" id="companyNameStatus"><i class="fas fa-exclamation-triangle"></i>
-                            Company Name</li>
                     </ul>
                 </div>
             </div>
@@ -131,38 +144,134 @@
         // Check Status of fileName, companyName, jobTitle, jobDescription
         $(document).on("change keyup paste", "#fileName, #jobDescription, #jobTitle, #companyName", function(e) {
             let statusSpan = "#" + $(this).attr('id') + "Status";
-            console.log(statusSpan);
             if ($(this).val() == "") {
-                $(statusSpan).addClass('text-warning').removeClass('text-success');
-                $(statusSpan).find('i').addClass('fa-exclamation-triangle').removeClass('fa-check-circle');
+                switchWarningStatus(statusSpan);
             } else {
-                $(statusSpan).addClass('text-success').removeClass('text-warning');
-                $(statusSpan).find('i').addClass('fa-check-circle').removeClass('fa-exclamation-triangle');
+                switchSuccessStatus(statusSpan);
             }
         });
         // Clear Inputs 
         $(document).on("click", "#clearInputs", function(e) {
             coverLetterContent.setData('');
-
+            $("#companySelector").val("");
             $("#fileName, #jobDescription, #jobTitle, #companyName, #coverLetterContent").val("");
-            $("#fileNameStatus, #jobDescriptionStatus, #jobTitleStatus, #companyNameStatus")
-                .addClass('text-warning').removeClass('text-success');
-            $("#fileNameStatus, #jobDescriptionStatus, #jobTitleStatus, #companyNameStatus")
-                .find('i').addClass('fa-exclamation-triangle').removeClass('fa-check-circle');
+            switchWarningStatus("#fileNameStatus, #jobDescriptionStatus, #jobTitleStatus, #companyNameStatus");
         });
 
         // Download File 
         $(document).on("click", "#downloadFile", function(e) {
-
+            let fileName = $("#fileName").val() + ".pdf";
+            let companyId = $("#companySelector").val();
+            let fileContent = coverLetterContent.getData()
+            $.ajax({
+                url: `{{ route('panel.generator.cover-letter.download') }}`,
+                method: "POST",
+                data: {
+                    company_id: companyId,
+                    file_name: fileName,
+                    file_content: fileContent,
+                    _token: csrfToken,
+                },
+                dataType: "json",
+                success: function(response) {
+                    if (response.file_url) {
+                        var downloadLink = document.createElement('a');
+                        downloadLink.href = response
+                            .file_url;
+                        downloadLink.download = fileName;
+                        downloadLink.style.display = 'none';
+                        document.body.appendChild(downloadLink);
+                        downloadLink.click();
+                        document.body.removeChild(downloadLink);
+                    } else {
+                        // Handle errors here
+                        alert("File generation failed.");
+                    }
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
         });
 
         // Listen Cover Letter Changes 
         coverLetterContent.on('change', function() {
             if (coverLetterContent.getData() == '') {
-                $("#downloadFile, #saveLetter, #generateCoverLetter").prop("disabled", true);
+                $("#downloadFile, #saveLetter").prop("disabled", true);
             } else {
-                $("#downloadFile, #saveLetter, #generateCoverLetter").prop("disabled", false);
+                $("#downloadFile, #saveLetter").prop("disabled", false);
             }
         });
+
+        // fetch company details AJAX call
+        $(document).on("change", "#companySelector", function(e) {
+            let companyId = $(this).val();
+            if (companyId == "") return false;
+            // fetch company details route
+            let routeUrl = $("#companySelector option:selected").attr("data-route-url");
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: routeUrl,
+                data: {
+                    company_id: companyId
+                },
+                cache: false,
+                contentType: false,
+                processData: false,
+                beforeSend: function() {},
+                success: function(data) {
+                    if (data.company) {
+                        if (data.company.name) {
+                            $("#companyName").val(data.company.name);
+                            switchSuccessStatus("#companyNameStatus");
+                        } else {
+                            switchWarningStatus("#companyNameStatus");
+                        }
+                        if (data.company.job_title) {
+                            $("#jobTitle").val(data.company.job_title);
+                            switchSuccessStatus("#jobTitleStatus");
+                        } else {
+                            switchWarningStatus("#jobTitleStatus");
+                        }
+                        if (data.company.job_description) {
+                            $("#jobDescription").val(data.company.job_description);
+                            switchSuccessStatus("#jobDescriptionStatus");
+                        } else {
+                            switchWarningStatus("#jobDescriptionStatus");
+                        }
+                        if (data.company.name) {
+                            let fileCompanyName = (data.company.name).replaceAll(" ", "_")
+                                .toUpperCase();
+                            $("#fileName").val("COVER_LETTER_FOR_" + fileCompanyName);
+                            switchSuccessStatus("#fileNameStatus");
+                        } else {
+                            switchWarningStatus("#fileNameStatus");
+                        }
+
+                    }
+                },
+            });
+        });
+
+        // Switch status to warning
+        function switchWarningStatus(elementId) {
+            $(elementId).addClass('text-warning').removeClass('text-success');
+            $(elementId).find('i').addClass('fa-exclamation-triangle').removeClass('fa-check-circle');
+        }
+        // Switch status to success
+        function switchSuccessStatus(elementId) {
+            $(elementId).addClass('text-success').removeClass('text-warning');
+            $(elementId).find('i').addClass('fa-check-circle').removeClass('fa-exclamation-triangle');
+        }
+
+
+        // Generate cover letter
+
+
+        function generateCoverLetter(companyId, companyName, jobTitle, jobDescription, fileName) {
+
+
+        }
     </script>
 @endpush

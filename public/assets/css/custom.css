@@ -23,3 +23,17 @@
 .sidebar-nav #sidebarnav .sidebar-item .sidebar-link {
     font-size: 14px;
 }
+
+.sample-table th,
+.sample-table td {
+    padding: 0;
+    font-size: 12px;
+}
+
+#file-input {
+    display: none;
+}
+.attachments-input-label {
+    cursor: pointer;
+    
+}

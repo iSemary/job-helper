@@ -1,3 +1,5 @@
+const loadingSpan = `<span><i class="fa fa-spinner fa-spin"></i> Processing, Please wait...</span>`;
+const csrfToken = $('meta[name="_token"]').attr("content");
 // Switch between login form and register form
 $(".switch-login, .switch-register").on("click", function (e) {
     $(".login-form, .register-form").toggleClass("d-none");
@@ -59,7 +61,7 @@ $(".toggle-sidebar").click(function (e) {
         $(".left-sidebar").css("width", "260px");
     }
 });
-
+// Global ajax edit form
 $(document).on("submit", "#editForm", function (e) {
     e.preventDefault();
     let formBtn = $(this).find(":submit");
@@ -83,7 +85,7 @@ $(document).on("submit", "#editForm", function (e) {
         },
         success: function (data) {
             $(".edit-status").html(
-                `<h6 class="text-success"><i class="fas fa-check-circle"></i> Updated successfully!</h6>`
+                `<h6 class="text-success"><i class="fas fa-check-circle"></i> ${data.message}</h6>`
             );
             formBtn.prop("disabled", false);
             $(".dataTable").DataTable().ajax.reload();
@@ -99,9 +101,57 @@ $(document).on("submit", "#editForm", function (e) {
         },
     });
 });
+// Global ajax create form
+$(document).on("submit", "#createForm", function (e) {
+    e.preventDefault();
+    let formBtn = $(this).find(":submit");
+    let formData = new FormData(this);
+    let formID = "#" + $(this).attr("id");
+    let formUrl = $(this).attr("action");
+
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: formUrl,
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        beforeSend: function () {
+            $(".create-status").html(
+                `<h6 class="text-muted"><i class="fas fa-circle-notch fa-spin"></i> Creating, Please wait...</h6>`
+            );
+            formBtn.prop("disabled", true);
+        },
+        success: function (data) {
+            $(".create-status").html(
+                `<h6 class="text-success"><i class="fas fa-check-circle"></i> ${data.message}</h6>`
+            );
+            formBtn.prop("disabled", false);
+            $("input, textarea", formID)
+                .not(
+                    ":input[type=button], :input[type=submit], :input[type=hidden], :input[type=reset]"
+                )
+                .val("");
+            $(".dataTable").DataTable().ajax.reload();
+        },
+        error: function (data) {
+            $(".create-status").html("");
+            formBtn.prop("disabled", false);
+            console.log(data);
+            // $.each(xhr.responseJSON.errors, function(key, value) {
+            $(".create-status").append(
+                `<h6 class="text-danger"><i class="fas fa-exclamation-triangle"></i> ` +
+                    (data.responseJSON.message ?? "Something went wrong") +
+                    `</h6>`
+            );
+            // });
+            formBtn.prop("disabled", false);
+        },
+    });
+});
 
 // PDF Loader
-
 // Function to load and display the PDF
 function loadPDF(pdfUrl, viewElementId) {
     // Initialize PDF.js
@@ -134,3 +184,118 @@ function loadPDF(pdfUrl, viewElementId) {
         }
     });
 }
+
+// Dynamic dataTable with date range filters
+function filterTable(
+    route,
+    tableId,
+    fromDate,
+    toDate,
+    init,
+    cols,
+    colDefs,
+    dataExtra
+) {
+    // init
+    if (init) {
+        $(tableId).DataTable().destroy();
+    }
+
+    let data = {
+        from_date: fromDate ?? null,
+        to_date: toDate ?? null,
+        dataTables: true,
+    };
+    if (dataExtra) {
+        $.extend(data, dataExtra);
+    }
+
+    $(tableId).DataTable({
+        order: [[0, "desc"]],
+        processing: true,
+        scrollX: true,
+        responsive: true,
+        serverSide: true,
+        columnDefs: colDefs ?? null,
+        ajax: {
+            url: route,
+            data: data,
+        },
+        columns: cols,
+    });
+}
+
+// Global Modal Opener
+function openModal(url) {
+    $("#openModal").modal({
+        backdrop: true,
+        show: true,
+    });
+    $(".modal-dialog").draggable({
+        handle: ".modal-header",
+    });
+
+    $("#openTargetModal")
+        .html(loadingSpan)
+        .load(url, function () {
+            $("select.select2").select2({});
+            $("body").tooltip({
+                selector: '[data-toggle="tooltip"]',
+            });
+        });
+}
+$("#openModal").on("hidden.bs.modal", function () {
+    $("#openTargetModal").html("");
+});
+
+/**
+ *
+ * ===== Delete Function Section
+ *
+ */
+
+function deleteRow(link, type) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You will delete this " + type + " ?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Delete",
+        cancelButtonText: "Cancel",
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: link,
+                type: "DELETE",
+                data: {
+                    _token: csrfToken,
+                },
+            })
+                .done(function (data) {
+                    Swal.fire({
+                        text: type + " deleted successfully",
+                        confirmButtonText: "ok",
+                        type: "success",
+                        toast: true,
+                        position: "bottom",
+                    });
+                    $(".dataTable").DataTable().ajax.reload();
+                })
+                .fail(function (data) {
+                    Swal.fire({
+                        text: data.message, 
+                        type: "error",
+                        toast: true,
+                        position: "bottom",
+                    });
+                });
+        }
+    });
+}
+
+$(document).on("click", ".delete-btn", function (event) {
+    event.preventDefault();
+    deleteRow($(this).attr("data-url"), $(this).attr("data-delete-type"));
+});

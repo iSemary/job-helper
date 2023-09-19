@@ -8,6 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" sizes="32x32" href="{{ asset('favicon.ico') }}">
+    <meta name="_token" content="{{ csrf_token() }}">
     <title>Job Helper</title>
     {{-- Panel Assets --}}
     @auth
@@ -44,6 +45,7 @@
             @endauth
         </div>
     </div>
+    @include('layout.modals.open')
     <script src="{{ asset('assets/plugins/jquery/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/bootstrap/bootstrap.bundle.min.js') }}"></script>
@@ -60,6 +62,7 @@
     @endauth
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     @yield('scripts')
+    @stack('scripts')
 </body>
 
 </html>
