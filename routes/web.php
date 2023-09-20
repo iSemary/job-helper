@@ -31,7 +31,6 @@ Route::middleware(['auth'])->group(function () {
             Route::get('email-credentials/edit', [EmailCredentialController::class, 'edit'])->name('email-credentials.edit');
             Route::post('email-credentials/update', [EmailCredentialController::class, 'update'])->name('email-credentials.update');
             Route::post('email-credentials/test',  [EmailCredentialController::class, 'test'])->name('email-credentials.test');
-       
         });
 
         Route::get('companies/excel', [CompanyController::class, "importExcel"])->name('companies.excel.import');
@@ -40,7 +39,10 @@ Route::middleware(['auth'])->group(function () {
 
         Route::prefix('generator')->name('generator.')->group(function () {
             Route::get('cover-letter', [GeneratorController::class, "coverLetter"])->name('cover-letter');
+            Route::post('cover-letter/generate', [GeneratorController::class, "generateCoverLetter"])->name('cover-letter.generate');
+
             Route::get('motivation-message', [GeneratorController::class, "motivationMessage"])->name('motivation-message');
+
             Route::get('company', [GeneratorController::class, 'company'])->name('company');
 
             Route::post("cover-letter/pdf", [GeneratorController::class, "downloadCoverLetter"])->name("cover-letter.download");

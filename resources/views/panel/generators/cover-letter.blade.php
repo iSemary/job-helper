@@ -10,7 +10,8 @@
                 <br />
                 <div>
                     <h5 for="">GPT Prompt Text</h5>
-                    <textarea name="prompt" class="form-control" placeholder="Enter job GPT prompt text" cols="30" rows="10"></textarea>
+                    <textarea name="prompt" class="form-control" placeholder="Enter job GPT prompt text" cols="30" rows="10">Please generate a cover letter for the position of [Job Title] at [Company Name]. Highlight my qualifications, skills, and enthusiasm for the role. The cover letter should be professional and well-structured. Here's the job description [Job Description] 
+                        [Provide any additional information or preferences you have for the cover letter if needed.]</textarea>
                 </div>
             </div>
             <div class="col-4">
@@ -254,10 +255,42 @@
             });
         });
 
+        $(document).on("click", "#generateCoverLetter", function(e) {
+            generateCoverLetter(
+                $("#companySelector").val(),
+                $("#companyName").val(),
+                $("#jobTitle").val(),
+                $("#jobDescription").val(),
+                $("#fileName").val(),
+                $("#prompt").val(),
+            );
+        });
         // Generate cover letter
-        function generateCoverLetter(companyId, companyName, jobTitle, jobDescription, fileName) {
+        function generateCoverLetter(companyId, companyName, jobTitle, jobDescription, fileName, prompt) {
+            $.ajax({
+                url: `{{ route('panel.generator.cover-letter.generate') }}`,
+                method: "POST",
+                data: {
+                    company_id: companyId,
+                    file_name: fileName,
+                    company_name: companyName,
+                    job_title: jobTitle,
+                    job_description: jobDescription,
+                    file_name: fileName,
+                    prompt: prompt,
+                    _token: csrfToken,
+                },
+                dataType: "json",
+                beforeSend: function() {
 
-
+                },
+                success: function(response) {
+                    coverLetterContent.setData(response.message);
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
         }
     </script>
 @endpush

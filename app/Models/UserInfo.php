@@ -13,6 +13,6 @@ class UserInfo extends Model {
     protected $appends = ['resume'];
 
     public function getResumeAttribute() {
-        return $this->attributes['resume'] ? asset("storage/user/resume/" . $this->attributes['resume']) : null;
+        return isset($this->attributes['resume']) ? asset("storage/user/resume/" . $this->attributes['resume']) : null;
     }
 }

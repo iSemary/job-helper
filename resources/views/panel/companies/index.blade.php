@@ -82,12 +82,12 @@
                         name: 'job_title'
                     },
                     {
-                        data: 'job_description',
-                        name: 'job_description'
-                    },
-                    {
                         data: 'job_salary',
                         name: 'job_salary'
+                    },
+                    {
+                        data: 'job_description',
+                        name: 'job_description'
                     },
                     {
                         data: 'hr_name',

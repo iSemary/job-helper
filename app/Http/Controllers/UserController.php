@@ -34,7 +34,7 @@ class UserController extends Controller {
             $userInfo->user_id = $userId;
         }
         // Check if resume is uploaded
-        $resume = $userInfo->resume;
+        $resume = isset($userInfo->resume) ? basename($userInfo->resume) : null;
         $resumeFileName = $userInfo->resume_file_name;
         if ($request->file('resume')) {
             $resume = Uploader::file($request->file('resume'), $userInfo, 'resume', 'user/resume', false);

@@ -68,4 +68,17 @@ class GeneratorController extends Controller {
 
         return $response;
     }
+
+    public function generateCoverLetter(Request $request) {
+        try {
+            $message = "OK";
+            return response()->json(['message' => 'Cover Letter Generated successfully', 'message' => $message]);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Failed to generate cover letter'], 500);
+        }
+    }
+
+    private function preparePromptMessage($request) {
+        
+    }
 }
