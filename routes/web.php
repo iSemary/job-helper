@@ -37,6 +37,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('companies/excel/store', [CompanyController::class, "storeExcel"])->name('companies.excel.store');
         Route::resources(['companies' => CompanyController::class]);
 
+        Route::get("kanban", [DashboardController::class, "kanban"])->name("kanban");
+
         Route::prefix('generator')->name('generator.')->group(function () {
             Route::get('cover-letter', [GeneratorController::class, "coverLetter"])->name('cover-letter');
             Route::post('cover-letter/generate', [GeneratorController::class, "generateCoverLetter"])->name('cover-letter.generate');

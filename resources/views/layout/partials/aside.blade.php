@@ -18,6 +18,13 @@
                         </span>
                     </a>
                 </li>
+                <li class="sidebar-item {{ Request::url() == route('panel.kanban') ? 'selected' : '' }}">
+                    <a class="sidebar-link page-switcher" data-switch-target="{{ route('panel.kanban') }}" href="#" aria-expanded="false">
+                        <span class="hide-menu">
+                            <i class="fas fa-columns"></i> Kanban Board
+                        </span>
+                    </a>
+                </li>
                 <li class="sidebar-item {{ Request::url() == route('panel.companies.index') ? 'selected' : '' }}">
                     <a class="sidebar-link page-switcher" data-switch-target="{{ route('panel.companies.index') }}"
                         href="#" aria-expanded="false">

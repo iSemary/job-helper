@@ -12,4 +12,7 @@ class DashboardController extends Controller {
     public function home() {
         return view("panel.home");
     }
+    public function kanban() {
+        return view("panel.kanban");
+    }
 }
