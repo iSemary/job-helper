@@ -35,10 +35,13 @@
 }
 .attachments-input-label {
     cursor: pointer;
-    
 }
 
-#resumeViewer, #fileViewer {
+#resumeViewer,
+#fileViewer {
     text-align: center;
     background-color: #ebebeb;
+}
+.page-wrapper > .container-fluid {
+    padding: 15px;
 }

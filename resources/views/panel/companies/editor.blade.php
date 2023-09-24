@@ -75,7 +75,7 @@
                     <div class="{{ isset($company) ? 'edit' : 'create' }}-status"></div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-{{ isset($company) ? 'primary' : 'success' }}">
+                    <button type="submit" class="btn btn-sm btn-{{ isset($company) ? 'primary' : 'success' }}">
                         {{ isset($company) ? 'Update' : 'Create' }}
                     </button>
                 </div>

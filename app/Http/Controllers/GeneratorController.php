@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\GPT;
 use App\Models\Company;
 use App\Models\CoverLetter;
 use App\Models\UserInfo;
@@ -11,6 +12,7 @@ use Exception;
 use Illuminate\Support\Facades\Storage;
 
 class GeneratorController extends Controller {
+    private $openAiToken;
 
     const coverLetterPath = "user/cover-letter/";
 
@@ -71,14 +73,26 @@ class GeneratorController extends Controller {
 
     public function generateCoverLetter(Request $request) {
         try {
-            $message = "OK";
-            return response()->json(['message' => 'Cover Letter Generated successfully', 'message' => $message]);
+            // Get and decrypt open ai token
+            $openAiToken = UserInfo::where("user_id", auth()->user()->id)->first()->open_ai_token;
+            $openAiToken = $openAiToken;
+            $this->openAiToken = $openAiToken;
+
+            $coverLetterPrompt = $this->preparePromptMessage($request);
+            $response = $this->returnGPTResponse($coverLetterPrompt);
+
+            return response()->json(['message' => 'Cover Letter Generated successfully', 'data' => $response]);
         } catch (Exception $e) {
-            return response()->json(['message' => 'Failed to generate cover letter'], 500);
+            return response()->json(['message' => 'Failed to generate cover letter', "error" => $e->getMessage()], 500);
         }
     }
 
     private function preparePromptMessage($request) {
-        
+        return $request->prompt;
+    }
+
+    private function returnGPTResponse($coverLetterPrompt) {
+        $gpt = new GPT($this->openAiToken);
+        return $gpt->returnCompletions($coverLetterPrompt);
     }
 }

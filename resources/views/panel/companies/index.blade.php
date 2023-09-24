@@ -8,9 +8,9 @@
                         <h5><i class="fas fa-database"></i> Companies Dataset</h5>
                     </div>
                     <div class="col-6 text-right">
-                        <button class="btn btn-success open-modal-btn" data-url={{ route('panel.companies.create') }}
+                        <button class="btn btn-sm btn-success open-modal-btn" data-url={{ route('panel.companies.create') }}
                             type="button">Create</button>
-                        <button class="btn btn-outline-success open-modal-btn"
+                        <button class="btn btn-sm btn-outline-success open-modal-btn"
                             data-url={{ route('panel.companies.excel.import') }} type="button">Import Excel</button>
                     </div>
                 </div>

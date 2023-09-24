@@ -10,7 +10,7 @@
                 <br />
                 <div>
                     <h5 for="">GPT Prompt Text</h5>
-                    <textarea name="prompt" class="form-control" placeholder="Enter job GPT prompt text" cols="30" rows="10">Please generate a cover letter for the position of [Job Title] at [Company Name]. Highlight my qualifications, skills, and enthusiasm for the role. The cover letter should be professional and well-structured. Here's the job description [Job Description] 
+                    <textarea name="prompt" id="prompt" class="form-control" placeholder="Enter job GPT prompt text" cols="30" rows="10">Please generate a cover letter in html format for the position of [Job Title] at [Company Name]. Highlight my qualifications, skills, and enthusiasm for the role. The cover letter should be professional and well-structured. Here's the job description [Job Description] 
                         [Provide any additional information or preferences you have for the cover letter if needed.]</textarea>
                 </div>
             </div>
@@ -285,7 +285,7 @@
 
                 },
                 success: function(response) {
-                    coverLetterContent.setData(response.message);
+                    coverLetterContent.setData(response.data.data.response);
                 },
                 error: function(data) {
                     console.log(data);

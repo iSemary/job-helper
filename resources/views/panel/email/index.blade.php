@@ -84,11 +84,11 @@
                                         <div class="email-status"></div>
                                     </div>
                                     <div class="col-6 text-right">
-                                        <button type="button" id="sendMail" class="btn btn-primary">
+                                        <button type="button" id="sendMail" class="btn btn-sm btn-primary">
                                             <i class="far fa-envelope"></i>
                                             Preview
                                         </button>
-                                        <button type="submit" id="previewMail" class="btn btn-success">
+                                        <button type="submit" id="previewMail" class="btn btn-sm btn-success">
                                             <i class="far fa-envelope"></i>
                                             Send
                                         </button>
