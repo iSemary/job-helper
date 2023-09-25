@@ -244,9 +244,9 @@
                             $.map(data.company.cover_letters, function(coverLetter, index) {
                                 $('#coverLetterSelector').append(
                                     `<option ${index == 0 ? "selected" : ""}
-                                    data-file-path="${coverLetter.file_path}"
+                                    data-file-path="${coverLetter.original_file_name}"
                                     data-file-name="${coverLetter.file_name}"
-                                    value="${coverLetter.id}">#${coverLetter.id} ${coverLetter.file_name}</option>`
+                                    value="${coverLetter.id}">#${coverLetter.id} ${coverLetter.original_file_name}</option>`
                                 );
                             });
 
@@ -266,7 +266,7 @@
 
         function appendCoverLetterAttachment(coverLetter) {
             $(".cover-letter-attachment").html(
-                `<a href="#" data-file-url="${coverLetter.file_path}" class="text-primary view-file"><b><i class="fas fa-paperclip"></i> Cover Letter: </b>${coverLetter.file_name}</a>`
+                `<a href="#" data-file-url="${coverLetter.file_path}" class="text-primary view-file"><b><i class="fas fa-paperclip"></i> Cover Letter: </b>${coverLetter.original_file_name}</a>`
             );
         }
 

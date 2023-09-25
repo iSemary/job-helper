@@ -12,7 +12,6 @@ class Company extends Model {
 
 
     public function cover_letters() {
-
         return $this->hasMany(CoverLetter::class);
     }
 }
