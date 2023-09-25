@@ -10,7 +10,8 @@
                 <br />
                 <div>
                     <h5 for="">GPT Prompt Text</h5>
-                    <textarea name="prompt" id="prompt" class="form-control" placeholder="Enter job GPT prompt text" cols="30" rows="10">Please generate a cover letter in html format for the position of [Job Title] at [Company Name]. Highlight my qualifications, skills, and enthusiasm for the role. The cover letter should be professional and well-structured. Here's the job description [Job Description] 
+                    <textarea name="prompt" id="prompt" class="form-control" placeholder="Enter job GPT prompt text" cols="30"
+                        rows="10">Please generate a cover letter in html format for the position of [Job Title] at [Company Name]. Highlight my qualifications, skills, and enthusiasm for the role. The cover letter should be professional and well-structured. Here's the job description [Job Description] 
                         [Provide any additional information or preferences you have for the cover letter if needed.]</textarea>
                 </div>
             </div>
@@ -89,7 +90,7 @@
                 </div>
                 <hr>
                 <div class="my-2">
-                    <h5 class="text-dark"><i class="fas fa-info-circle"></i> Cover Letter Status</h5>
+                    <h5 class="text-dark">Cover Letter Status</h5>
                     <ul class="form-status">
                         <li class="text-{{ $userInfo ? 'success' : 'warning' }}"><i
                                 class="fas fa-{{ $userInfo ? 'check-circle' : 'exclamation-triangle' }}"></i> Your Info
@@ -159,23 +160,26 @@
             switchWarningStatus("#fileNameStatus, #jobDescriptionStatus, #jobTitleStatus, #companyNameStatus");
         });
 
-        // Download File 
-        $(document).on("click", "#downloadFile", function(e) {
+        // Download / Save File 
+        $(document).on("click", "#downloadFile, #saveLetter", function(e) {
             let fileName = $("#fileName").val() + ".pdf";
             let companyId = $("#companySelector").val();
-            let fileContent = coverLetterContent.getData()
+            let prompt = $("#prompt").val();
+            let fileContent = coverLetterContent.getData();
+            let downloadFile = ($(this).attr("id") == "downloadFile")
             $.ajax({
                 url: `{{ route('panel.generator.cover-letter.download') }}`,
                 method: "POST",
                 data: {
                     company_id: companyId,
+                    prompt: prompt,
                     file_name: fileName,
                     file_content: fileContent,
                     _token: csrfToken,
                 },
                 dataType: "json",
                 success: function(response) {
-                    if (response.file_url) {
+                    if (response.file_url && downloadFile) {
                         var downloadLink = document.createElement('a');
                         downloadLink.href = response
                             .file_url;
@@ -184,9 +188,6 @@
                         document.body.appendChild(downloadLink);
                         downloadLink.click();
                         document.body.removeChild(downloadLink);
-                    } else {
-                        // Handle errors here
-                        alert("File generation failed.");
                     }
                 },
                 error: function(data) {
@@ -254,7 +255,7 @@
                 },
             });
         });
-
+        // Generate button listener
         $(document).on("click", "#generateCoverLetter", function(e) {
             generateCoverLetter(
                 $("#companySelector").val(),
@@ -265,8 +266,10 @@
                 $("#prompt").val(),
             );
         });
+
         // Generate cover letter
-        function generateCoverLetter(companyId, companyName, jobTitle, jobDescription, fileName, prompt) {
+        function generateCoverLetter(companyId, companyName, jobTitle, jobDescription, fileName, prompt, download = false) {
+            $("#generateCoverLetter").prop("disabled", true);
             $.ajax({
                 url: `{{ route('panel.generator.cover-letter.generate') }}`,
                 method: "POST",
@@ -282,12 +285,14 @@
                 },
                 dataType: "json",
                 beforeSend: function() {
-
+                    coverLetterContent.setData("Waiting for GPT to get a response, please wait...");
                 },
                 success: function(response) {
+                    $("#generateCoverLetter").prop("disabled", false);
                     coverLetterContent.setData(response.data.data.response);
                 },
                 error: function(data) {
+                    $("#generateCoverLetter").prop("disabled", false);
                     console.log(data);
                 }
             });

@@ -24,12 +24,12 @@
                             <th>Email</th>
                             <th>Industry</th>
                             <th>Job Title</th>
-                            <th>Job Description</th>
                             <th>Job Salary</th>
+                            <th>Created At</th>
+                            <th>Job Description</th>
                             <th>Hr Name</th>
                             <th>Hr Email</th>
                             <th>Website</th>
-                            <th>Created At</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -41,12 +41,12 @@
                             <th>Email</th>
                             <th>Industry</th>
                             <th>Job Title</th>
-                            <th>Job Description</th>
                             <th>Job Salary</th>
+                            <th>Created At</th>
+                            <th>Job Description</th>
                             <th>Hr Name</th>
                             <th>Hr Email</th>
                             <th>Website</th>
-                            <th>Created At</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -86,6 +86,10 @@
                         name: 'job_salary'
                     },
                     {
+                        data: 'created_at',
+                        name: 'created_at'
+                    },
+                    {
                         data: 'job_description',
                         name: 'job_description'
                     },
@@ -100,10 +104,6 @@
                     {
                         data: 'website',
                         name: 'website'
-                    },
-                    {
-                        data: 'created_at',
-                        name: 'created_at'
                     },
                     {
                         data: 'action',

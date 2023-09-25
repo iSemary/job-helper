@@ -2,7 +2,8 @@
 @section('switcher')
     <link rel="stylesheet" href="{{ asset('assets/plugins/jqwidgets/jqx.base.css') }}">
     <div class="kanban-page">
-        <div id="kanbanContent">
+        <h5 class="text-center"><i class="far fa-building"></i> Organize Company Leads</h5>
+        <div id="kanbanContent" class="m-0 w-100">
 
         </div>
     </div>
@@ -15,6 +16,10 @@
     <script src="{{ asset('assets/plugins/jqwidgets/jqxkanban.js') }}"></script>
     <script>
         $(document).ready(function() {
+            loadKanbanContent();
+        });
+
+        function loadKanbanContent() {
             var fields = [{
                     name: "id",
                     type: "string"
@@ -45,45 +50,13 @@
             ];
             var source = {
                 localData: [{
-                        id: "1161",
-                        state: "new",
-                        label: "Combine Orders",
-                        tags: "orders, combine",
-                        hex: "#5dc3f0",
-                        resourceId: 3
-                    },
-                    {
-                        id: "1645",
-                        state: "work",
-                        label: "Change Billing Address",
-                        tags: "billing",
-                        hex: "#f19b60",
-                        resourceId: 1
-                    },
-                    {
-                        id: "9213",
-                        state: "new",
-                        label: "One item added to the cart",
-                        tags: "cart",
-                        hex: "#5dc3f0",
-                        resourceId: 3
-                    },
-                    {
-                        id: "6546",
-                        state: "done",
-                        label: "Edit Item Price",
-                        tags: "price, edit",
-                        hex: "#5dc3f0",
-                        resourceId: 4
-                    },
-                    {
-                        id: "9034",
-                        state: "new",
-                        label: "Login 404 issue",
-                        tags: "issue, login",
-                        hex: "#6bbd49"
-                    }
-                ],
+                    id: "1161", // company id
+                    state: "backlog", // apply status
+                    label: "Notchnco", // company name
+                    hex: "#5dc3f0", // color
+                    resourceId: 3, // resource id
+                    tags: "/"
+                }],
                 dataType: "array",
                 dataFields: fields
             };
@@ -91,56 +64,11 @@
             var resourcesAdapterFunc = function() {
                 var resourcesSource = {
                     localData: [{
-                            id: 0,
-                            name: "No name",
-                            image: "../../jqwidgets/styles/images/common.png",
-                            common: true
-                        },
-                        {
-                            id: 1,
-                            name: "Andrew Fuller",
-                            image: "../../images/andrew.png"
-                        },
-                        {
-                            id: 2,
-                            name: "Janet Leverling",
-                            image: "../../images/janet.png"
-                        },
-                        {
                             id: 3,
-                            name: "Steven Buchanan",
-                            image: "../../images/steven.png"
+                            name: "Notchnco",
+                            image: "/assets/images/office-building.png",
                         },
-                        {
-                            id: 4,
-                            name: "Nancy Davolio",
-                            image: "../../images/nancy.png"
-                        },
-                        {
-                            id: 5,
-                            name: "Michael Buchanan",
-                            image: "../../images/Michael.png"
-                        },
-                        {
-                            id: 6,
-                            name: "Margaret Buchanan",
-                            image: "../../images/margaret.png"
-                        },
-                        {
-                            id: 7,
-                            name: "Robert Buchanan",
-                            image: "../../images/robert.png"
-                        },
-                        {
-                            id: 8,
-                            name: "Laura Buchanan",
-                            image: "../../images/Laura.png"
-                        },
-                        {
-                            id: 9,
-                            name: "Laura Buchanan",
-                            image: "../../images/Anne.png"
-                        }
+
                     ],
                     dataType: "array",
                     dataFields: [{
@@ -169,18 +97,42 @@
                 source: dataAdapter,
                 columns: [{
                         text: "Backlog",
-                        dataField: "new"
+                        dataField: "backlog"
                     },
                     {
-                        text: "In Progress",
-                        dataField: "work"
+                        text: "Sent Apply",
+                        dataField: "sent_apply"
                     },
                     {
-                        text: "Done",
-                        dataField: "done"
-                    }
+                        text: "Sent Reminder",
+                        dataField: "sent_reminder"
+                    },
+                    {
+                        text: "No Response",
+                        dataField: "no_response"
+                    },
+                    {
+                        text: "Pending Task",
+                        dataField: "pending_task"
+                    },
+                    {
+                        text: "First Interview",
+                        dataField: "first_interview"
+                    },
+                    {
+                        text: "Second Interview",
+                        dataField: "second_interview"
+                    },
+                    {
+                        text: "Final Interview",
+                        dataField: "final_interview"
+                    },
+                    {
+                        text: "Rejection",
+                        dataField: "rejection"
+                    },
                 ]
             });
-        });
+        }
     </script>
 @endpush
