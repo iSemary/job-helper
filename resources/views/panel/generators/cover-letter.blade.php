@@ -166,7 +166,7 @@
             let companyId = $("#companySelector").val();
             let prompt = $("#prompt").val();
             let fileContent = coverLetterContent.getData();
-            let downloadFile = ($(this).attr("id") == "downloadFile")
+            let downloadFile = $(this).attr("id") == "downloadFile" ? 1 : 0;
             $.ajax({
                 url: `{{ route('panel.generator.cover-letter.download') }}`,
                 method: "POST",
@@ -175,6 +175,7 @@
                     prompt: prompt,
                     file_name: fileName,
                     file_content: fileContent,
+                    download_only: downloadFile,
                     _token: csrfToken,
                 },
                 dataType: "json",

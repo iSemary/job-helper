@@ -24,7 +24,7 @@ class CompanyController extends Controller {
     }
 
     public function show($id) {
-        $company = Company::where('id', $id)->where("user_id", auth()->user()->id)->first();
+        $company = Company::with('cover_letters')->where('id', $id)->where("user_id", auth()->user()->id)->first();
         if ($company) {
             return response()->json(['message' => 'Company fetched successfully', 'company' => $company], 200);
         }

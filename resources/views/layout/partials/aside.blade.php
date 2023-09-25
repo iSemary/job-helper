@@ -11,8 +11,8 @@
                 </li>
                 <li class="list-divider"></li>
                 <li class="nav-small-cap"><span class="hide-menu">Applications</span></li>
-                <li class="sidebar-item {{ Request::url() == route('panel.apply') ? 'selected' : '' }}">
-                    <a class="sidebar-link page-switcher" data-switch-target="{{ route('panel.apply') }}" href="#" aria-expanded="false">
+                <li class="sidebar-item {{ Request::url() == route('panel.email.apply') ? 'selected' : '' }}">
+                    <a class="sidebar-link page-switcher" data-switch-target="{{ route('panel.email.apply') }}" href="#" aria-expanded="false">
                         <span class="hide-menu">
                             <i class="fas fa-paper-plane"></i> Apply
                         </span>

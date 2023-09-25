@@ -50,6 +50,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post("cover-letter/pdf", [GeneratorController::class, "downloadCoverLetter"])->name("cover-letter.download");
         });
 
-        Route::get('apply', [EmailController::class, 'index'])->name('apply');
+        Route::get('email/apply', [EmailController::class, 'index'])->name('email.apply');
+        Route::post('email/send', [EmailController::class, 'send'])->name('email.send');
     });
 });

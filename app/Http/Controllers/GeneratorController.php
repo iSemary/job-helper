@@ -52,16 +52,19 @@ class GeneratorController extends Controller {
             $uniqueName = uniqid() . '.pdf';
             $disk = Storage::disk('public');
             $disk->put(self::coverLetterPath . $uniqueName, $domPDF->output());
+
             // Save the row in database
-            CoverLetter::create([
-                'user_id' => auth()->user()->id,
-                'company_id' => $request->company_id ?? null,
-                'prompt' => $request->prompt,
-                'content' => $request->file_content,
-                'original_file_name' => $request->file_name,
-                'file_name' => $uniqueName,
-                'status' => 0,
-            ]);
+            if (!$request->download_only) {
+                CoverLetter::create([
+                    'user_id' => auth()->user()->id,
+                    'company_id' => $request->company_id ?? null,
+                    'prompt' => $request->prompt,
+                    'content' => $request->file_content,
+                    'original_file_name' => $request->file_name,
+                    'file_name' => $uniqueName,
+                    'status' => 0,
+                ]);
+            }
 
             $response['success'] = true;
             $response['file_path'] = asset('storage/' . self::coverLetterPath . $uniqueName);
