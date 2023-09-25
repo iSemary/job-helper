@@ -44,8 +44,8 @@
                             <th>Website</th>
                         </thead>
                         <tbody>
-                            <td>Required</td>
-                            <td>Required</td>
+                            <td class="text-danger">Required</td>
+                            <td class="text-danger">Required</td>
                             <td>Not Required</td>
                             <td>Not Required</td>
                             <td>Not Required</td>
