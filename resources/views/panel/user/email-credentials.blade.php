@@ -59,14 +59,14 @@
                     </div>
                     <div class="edit-status mt-2"></div>
                     <div>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
+                        <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-save"></i> Save</button>
                     </div>
                 </form>
                 <form method="POST" class="mt-2" id="testMailForm"
                     action="{{ route('panel.user.email-credentials.test') }}">
                     @csrf
                     {{ method_field('POST') }}
-                    <button type="submit" class="btn btn-danger"><i class="fas fa-vial"></i> Send Test Mail</button>
+                    <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-vial"></i> Send Test Mail</button>
                 </form>
             </div>
         </div>

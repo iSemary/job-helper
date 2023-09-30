@@ -9,15 +9,13 @@ return new class extends Migration {
      * Run the migrations.
      */
     public function up(): void {
-        Schema::create('cover_letters', function (Blueprint $table) {
+        Schema::create('email_messages', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('company_id');
             $table->longText('prompt')->nullable();
             $table->longText('content')->nullable();
-            $table->string('original_file_name', 255)->nullable();
-            $table->string('file_name', 255)->nullable();
-            $table->tinyInteger('status',)->nullable();
+            $table->tinyInteger('type')->default(0); // 0 -> Motivation Message | 1-> Reminder Message 
+            $table->tinyInteger('status')->default(0); // 0 -> Pending | 1 -> Sent
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration {
      * Reverse the migrations.
      */
     public function down(): void {
-        Schema::dropIfExists('cover_letters');
+        Schema::dropIfExists('email_messages');
     }
 };

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\MailerConfiguration;
 use App\Mail\TestMail;
 use App\Models\EmailCredentials;
 use Illuminate\Http\Request;
@@ -61,23 +62,9 @@ class EmailCredentialController extends Controller {
             return response()->json(['message' => 'Email credentials not exists'], 500);
         }
 
-        $this->updateMailerConfiguration($emailCredentials);
+        MailerConfiguration::update($emailCredentials);
 
         Mail::mailer('custom')->to($emailCredentials->from_address)->send(new TestMail(''));
         return response()->json(['message' => 'Test mail sent successfully']);
-    }
-
-    public function updateMailerConfiguration($emailCredentials) {
-        $mailerConfig = [
-            'transport' => $emailCredentials->mailer,
-            'host' => $emailCredentials->host,
-            'port' => $emailCredentials->port,
-            'encryption' => $emailCredentials->encryption,
-            'username' => $emailCredentials->username,
-            'password' => $emailCredentials->password,
-            'timeout' => null,
-        ];
-
-        config(['mail.mailers.custom' => $mailerConfig]);
     }
 }

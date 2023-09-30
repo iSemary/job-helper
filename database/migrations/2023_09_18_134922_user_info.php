@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->boolean('looking_for_relocation')->default(1);
             $table->string('resume', 255)->nullable();
             $table->string('resume_file_name', 255)->nullable();
+            $table->string('open_ai_token', 1024)->nullable();
             $table->timestamps();
         });
     }

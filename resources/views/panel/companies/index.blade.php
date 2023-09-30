@@ -8,29 +8,30 @@
                         <h5><i class="fas fa-database"></i> Companies Dataset</h5>
                     </div>
                     <div class="col-6 text-right">
-                        <button class="btn btn-success open-modal-btn" data-url={{ route('panel.companies.create') }}
+                        <button class="btn btn-sm btn-success open-modal-btn" data-url={{ route('panel.companies.create') }}
                             type="button">Create</button>
-                        <button class="btn btn-outline-success open-modal-btn"
+                        <button class="btn btn-sm btn-outline-success open-modal-btn"
                             data-url={{ route('panel.companies.excel.import') }} type="button">Import Excel</button>
                     </div>
                 </div>
             </div>
             <div class="card-body">
-                <table id="companies" class="display" style="width: 100%;">
+                <table id="companies" class="display compact" style="width: 100%;">
                     <thead>
                         <tr>
                             <th>Name</th>
                             <th>Phone</th>
                             <th>Email</th>
+                            <th>Status</th>
                             <th>Industry</th>
                             <th>Job Title</th>
-                            <th>Job Description</th>
                             <th>Job Salary</th>
+                            <th>Action</th>
+                            <th>Job Description</th>
                             <th>Hr Name</th>
                             <th>Hr Email</th>
                             <th>Website</th>
                             <th>Created At</th>
-                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -39,15 +40,16 @@
                             <th>Name</th>
                             <th>Phone</th>
                             <th>Email</th>
+                            <th>Status</th>
                             <th>Industry</th>
                             <th>Job Title</th>
-                            <th>Job Description</th>
                             <th>Job Salary</th>
+                            <th>Action</th>
+                            <th>Job Description</th>
                             <th>Hr Name</th>
                             <th>Hr Email</th>
                             <th>Website</th>
                             <th>Created At</th>
-                            <th>Action</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -59,7 +61,6 @@
 @push('extra-scripts')
     <script>
         $(document).ready(function() {
-            console.log(typeof companyCols == "undefined")
             if (typeof companyCols == 'undefined') {
                 var companyCols = [{
                         data: 'name',
@@ -74,6 +75,10 @@
                         name: 'email',
                     },
                     {
+                        data: 'status',
+                        name: 'status',
+                    },
+                    {
                         data: 'industry',
                         name: 'industry'
                     },
@@ -83,7 +88,13 @@
                     },
                     {
                         data: 'job_salary',
-                        name: 'job_salary'
+                        name: 'job_salary',
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'job_description',
@@ -104,12 +115,6 @@
                     {
                         data: 'created_at',
                         name: 'created_at'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
                     }
                 ];
             }

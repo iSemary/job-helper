@@ -10,20 +10,7 @@
             </div>
         </div>
         <div class="navbar-collapse collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav float-left me-auto ms-3 ps-1">
-                <li class="nav-item d-none d-md-block">
-                    <a class="nav-link" href="javascript:void(0)">
-                        <div class="customize-input">
-                            <select class="custom-select form-control bg-white custom-radius custom-shadow border-0">
-                                <option selected="">EN</option>
-                                <option value="1">AB</option>
-                                <option value="2">AK</option>
-                                <option value="3">BE</option>
-                            </select>
-                        </div>
-                    </a>
-                </li>
-            </ul>
+            <ul class="navbar-nav float-left me-auto ms-3 ps-1"></ul>
             <ul class="navbar-nav float-end">
                 <li class="nav-item">
                     <a href="#" class="toggle-sidebar">

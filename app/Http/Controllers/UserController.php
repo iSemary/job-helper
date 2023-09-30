@@ -51,6 +51,7 @@ class UserController extends Controller {
         $userInfo->looking_for_relocation = isset($request['looking_for_relocation']) ? 1 : 0;
         $userInfo->resume = $resume;
         $userInfo->resume_file_name = $resumeFileName;
+        $userInfo->open_ai_token = encrypt($request->open_ai_token);
 
         // Save the user info to the database
         $userInfo->save();

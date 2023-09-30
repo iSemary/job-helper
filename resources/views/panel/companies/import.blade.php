@@ -20,7 +20,7 @@
                             <small class="text-primary">Max: 30Mb | .xlsx, .xls, .csv</small>
                         </div>
                         <div class="form-group col-6 text-right">
-                            <button type="submit" class="btn btn-success">
+                            <button type="submit" class="btn btn-sm btn-success">
                                 Import
                             </button>
                         </div>
@@ -44,8 +44,8 @@
                             <th>Website</th>
                         </thead>
                         <tbody>
-                            <td>Required</td>
-                            <td>Required</td>
+                            <td class="text-danger">Required</td>
+                            <td class="text-danger">Required</td>
                             <td>Not Required</td>
                             <td>Not Required</td>
                             <td>Not Required</td>

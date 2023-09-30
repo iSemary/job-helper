@@ -57,6 +57,12 @@
                             </select>
                         </div>
                         <div class="form-group col-4">
+                            <label for="openAiToken">Open Ai Token</label>
+                            <input type="password" class="form-control" name="open_ai_token" id="openAiToken" required
+                                value="{{ $userInfo['open_ai_token'] ?? '' }}" placeholder="Open Ai Token">
+                            <small class="text-success"><i class="fas fa-passport"></i> Encrypted Token</small>
+                        </div>
+                        <div class="form-group col-4">
                             <label for="resumeFile">Resume / CV</label><br/>
                             <input type="file" name="resume" accept=".pdf,.doc,.docx" id="resumeFile">
                         </div>
