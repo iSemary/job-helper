@@ -1,6 +1,6 @@
 @extends('layout.switcher')
 @section('switcher')
-    <div class="generator-page cover-letter">
+    <div class="generator-page">
         <div class="row">
             <div class="col-8">
                 <div>
@@ -11,8 +11,7 @@
                 <div>
                     <h5 for="">GPT Prompt Text</h5>
                     <textarea name="prompt" id="prompt" class="form-control" placeholder="Enter job GPT prompt text" cols="30"
-                        rows="10">Please generate a cover letter in html format for the position of [Job Title] at [Company Name]. Highlight my qualifications, skills, and enthusiasm for the role. The cover letter should be professional and well-structured. Here's the job description [Job Description] 
-                        [Provide any additional information or preferences you have for the cover letter if needed.]</textarea>
+                        rows="10">Generate a cover letter in html format and just send the body of the cover letter only, for the position of [Job Title] at [Company Name]. Highlight my qualifications, skills, and enthusiasm for the role. The cover letter should be professional and well-structured. Here's the job description : [Job Description]</textarea>
                 </div>
             </div>
             <div class="col-4">
@@ -88,6 +87,7 @@
                         <i class="fas fa-save"></i> Save Cover Letter
                     </button>
                 </div>
+                <h6 class="cover-letter-status"></h6>
                 <hr>
                 <div class="my-2">
                     <h5 class="text-dark">Cover Letter Status</h5>
@@ -179,6 +179,13 @@
                     _token: csrfToken,
                 },
                 dataType: "json",
+                beforeSend: function() {
+                    if (!downloadFile) {
+                        $(".cover-letter-status").html(
+                            `<h6 class="text-muted"><i class="fas fa-circle-notch fa-spin"></i> Saving your cover letter...<h6/>`
+                        );
+                    }
+                },
                 success: function(response) {
                     if (response.file_url && downloadFile) {
                         var downloadLink = document.createElement('a');
@@ -189,6 +196,11 @@
                         document.body.appendChild(downloadLink);
                         downloadLink.click();
                         document.body.removeChild(downloadLink);
+                    }
+                    if (!downloadFile) {
+                        $(".cover-letter-status").html(
+                            `<h6 class="text-success"><i class="fas fa-check-circle"></i> Cover Letter saved successfully.</h6>`
+                        );
                     }
                 },
                 error: function(data) {
@@ -272,7 +284,7 @@
         function generateCoverLetter(companyId, companyName, jobTitle, jobDescription, fileName, prompt, download = false) {
             $("#generateCoverLetter").prop("disabled", true);
             $.ajax({
-                url: `{{ route('panel.generator.cover-letter.generate') }}`,
+                url: `{{ route('panel.generator.generate') }}`,
                 method: "POST",
                 data: {
                     company_id: companyId,
@@ -290,6 +302,7 @@
                 },
                 success: function(response) {
                     $("#generateCoverLetter").prop("disabled", false);
+                    // coverLetterContent.setData(response.data);
                     coverLetterContent.setData(response.data.data.response);
                 },
                 error: function(data) {

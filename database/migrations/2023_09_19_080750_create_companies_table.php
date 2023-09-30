@@ -19,6 +19,7 @@ class CreateCompaniesTable extends Migration {
             $table->string('hr_name', 255)->nullable();
             $table->string('hr_email', 255)->nullable();
             $table->string('website', 64)->nullable();
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
     }

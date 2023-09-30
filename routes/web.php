@@ -35,19 +35,24 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('companies/excel', [CompanyController::class, "importExcel"])->name('companies.excel.import');
         Route::post('companies/excel/store', [CompanyController::class, "storeExcel"])->name('companies.excel.store');
+        Route::post('companies/update-status', [CompanyController::class, "updateStatus"])->name('companies.updateStatus');
+        Route::get('companies/log/{id}', [CompanyController::class, "log"])->name('companies.log');
         Route::resources(['companies' => CompanyController::class]);
 
         Route::get("kanban", [DashboardController::class, "kanban"])->name("kanban");
 
         Route::prefix('generator')->name('generator.')->group(function () {
             Route::get('cover-letter', [GeneratorController::class, "coverLetter"])->name('cover-letter');
-            Route::post('cover-letter/generate', [GeneratorController::class, "generateCoverLetter"])->name('cover-letter.generate');
+            Route::post('generate', [GeneratorController::class, "generate"])->name('generate');
 
             Route::get('motivation-message', [GeneratorController::class, "motivationMessage"])->name('motivation-message');
+            Route::get('reminder-message', [GeneratorController::class, "reminderMessage"])->name('reminder-message');
 
             Route::get('company', [GeneratorController::class, 'company'])->name('company');
 
             Route::post("cover-letter/pdf", [GeneratorController::class, "downloadCoverLetter"])->name("cover-letter.download");
+
+            Route::post("message/save", [GeneratorController::class, "saveMessage"])->name("message.save");
         });
 
         Route::get('email/apply', [EmailController::class, 'index'])->name('email.apply');

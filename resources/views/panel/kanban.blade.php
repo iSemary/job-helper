@@ -15,124 +15,100 @@
     <script src="{{ asset('assets/plugins/jqwidgets/jqxsortable.js') }}"></script>
     <script src="{{ asset('assets/plugins/jqwidgets/jqxkanban.js') }}"></script>
     <script>
+        if (typeof kanbanStatuses == 'undefined') {
+            var kanbanStatuses = {!! $statuses !!}
+        }
+
+        if (typeof kanbanSource == 'undefined') {
+            var kanbanSource = kanbanResource = {!! $kanbanCompanies !!}
+        }
         $(document).ready(function() {
             loadKanbanContent();
-        });
 
-        function loadKanbanContent() {
-            var fields = [{
-                    name: "id",
-                    type: "string"
-                },
-                {
-                    name: "status",
-                    map: "state",
-                    type: "string"
-                },
-                {
-                    name: "text",
-                    map: "label",
-                    type: "string"
-                },
-                {
-                    name: "tags",
-                    type: "string"
-                },
-                {
-                    name: "color",
-                    map: "hex",
-                    type: "string"
-                },
-                {
-                    name: "resourceId",
-                    type: "number"
-                }
-            ];
-            var source = {
-                localData: [{
-                    id: "1161", // company id
-                    state: "backlog", // apply status
-                    label: "Notchnco", // company name
-                    hex: "#5dc3f0", // color
-                    resourceId: 3, // resource id
-                    tags: "/"
-                }],
-                dataType: "array",
-                dataFields: fields
-            };
-            var dataAdapter = new $.jqx.dataAdapter(source);
-            var resourcesAdapterFunc = function() {
-                var resourcesSource = {
-                    localData: [{
-                            id: 3,
-                            name: "Notchnco",
-                            image: "/assets/images/office-building.png",
-                        },
+            $('#kanbanContent').on('itemMoved', function(event) {
+                var args = event.args;
+                var itemId = args.itemData.id;
+                var newStatusId = args.newColumn.id;
 
-                    ],
-                    dataType: "array",
-                    dataFields: [{
-                            name: "id",
-                            type: "number"
-                        },
-                        {
-                            name: "name",
-                            type: "string"
-                        },
-                        {
-                            name: "image",
-                            type: "string"
-                        },
-                        {
-                            name: "common",
-                            type: "boolean"
-                        }
-                    ]
-                };
-                var resourcesDataAdapter = new $.jqx.dataAdapter(resourcesSource);
-                return resourcesDataAdapter;
-            }
-            $('#kanbanContent').jqxKanban({
-                resources: resourcesAdapterFunc(),
-                source: dataAdapter,
-                columns: [{
-                        text: "Backlog",
-                        dataField: "backlog"
+                $.ajax({
+                    type: "POST",
+                    url: `{{ route('panel.companies.updateStatus') }}`,
+                    data: {
+                        id: itemId,
+                        status: newStatusId,
+                        _token: csrfToken,
                     },
-                    {
-                        text: "Sent Apply",
-                        dataField: "sent_apply"
-                    },
-                    {
-                        text: "Sent Reminder",
-                        dataField: "sent_reminder"
-                    },
-                    {
-                        text: "No Response",
-                        dataField: "no_response"
-                    },
-                    {
-                        text: "Pending Task",
-                        dataField: "pending_task"
-                    },
-                    {
-                        text: "First Interview",
-                        dataField: "first_interview"
-                    },
-                    {
-                        text: "Second Interview",
-                        dataField: "second_interview"
-                    },
-                    {
-                        text: "Final Interview",
-                        dataField: "final_interview"
-                    },
-                    {
-                        text: "Rejection",
-                        dataField: "rejection"
-                    },
-                ]
+                    dataType: "dataType",
+                    success: function(response) {}
+                });
             });
-        }
+
+            function loadKanbanContent() {
+                var fields = [{
+                        name: "id",
+                        type: "string"
+                    },
+                    {
+                        name: "status",
+                        map: "state",
+                        type: "string"
+                    },
+                    {
+                        name: "text",
+                        map: "label",
+                        type: "string"
+                    },
+                    {
+                        name: "tags",
+                        type: "string"
+                    },
+                    {
+                        name: "color",
+                        map: "hex",
+                        type: "string"
+                    },
+                    {
+                        name: "resourceId",
+                        type: "number"
+                    }
+                ];
+                var source = {
+                    localData: kanbanSource,
+                    dataType: "array",
+                    dataFields: fields
+                };
+                var dataAdapter = new $.jqx.dataAdapter(source);
+                var resourcesAdapterFunc = function() {
+                    var resourcesSource = {
+                        localData: kanbanResource,
+                        dataType: "array",
+                        dataFields: [{
+                                name: "id",
+                                type: "number"
+                            },
+                            {
+                                name: "name",
+                                type: "string"
+                            },
+                            {
+                                name: "image",
+                                type: "string"
+                            },
+                            {
+                                name: "common",
+                                type: "boolean"
+                            }
+                        ]
+                    };
+                    var resourcesDataAdapter = new $.jqx.dataAdapter(resourcesSource);
+                    return resourcesDataAdapter;
+                }
+                $('#kanbanContent').jqxKanban({
+                    resources: resourcesAdapterFunc(),
+                    source: dataAdapter,
+                    columns: kanbanStatuses
+                });
+            }
+        });
     </script>
 @endpush

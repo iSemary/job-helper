@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 class GPT {
     private $token;
     private $model = "text-davinci-003";
-    private $maxTokens = 250;
+    private $maxTokens = 1000;
     private $temperature = 0.7;
 
     const END_POINT = "https://api.openai.com/v1/";

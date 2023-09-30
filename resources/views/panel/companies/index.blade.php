@@ -16,21 +16,22 @@
                 </div>
             </div>
             <div class="card-body">
-                <table id="companies" class="display" style="width: 100%;">
+                <table id="companies" class="display compact" style="width: 100%;">
                     <thead>
                         <tr>
                             <th>Name</th>
                             <th>Phone</th>
                             <th>Email</th>
+                            <th>Status</th>
                             <th>Industry</th>
                             <th>Job Title</th>
                             <th>Job Salary</th>
-                            <th>Created At</th>
+                            <th>Action</th>
                             <th>Job Description</th>
                             <th>Hr Name</th>
                             <th>Hr Email</th>
                             <th>Website</th>
-                            <th>Action</th>
+                            <th>Created At</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -39,15 +40,16 @@
                             <th>Name</th>
                             <th>Phone</th>
                             <th>Email</th>
+                            <th>Status</th>
                             <th>Industry</th>
                             <th>Job Title</th>
                             <th>Job Salary</th>
-                            <th>Created At</th>
+                            <th>Action</th>
                             <th>Job Description</th>
                             <th>Hr Name</th>
                             <th>Hr Email</th>
                             <th>Website</th>
-                            <th>Action</th>
+                            <th>Created At</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -59,7 +61,6 @@
 @push('extra-scripts')
     <script>
         $(document).ready(function() {
-            console.log(typeof companyCols == "undefined")
             if (typeof companyCols == 'undefined') {
                 var companyCols = [{
                         data: 'name',
@@ -74,6 +75,10 @@
                         name: 'email',
                     },
                     {
+                        data: 'status',
+                        name: 'status',
+                    },
+                    {
                         data: 'industry',
                         name: 'industry'
                     },
@@ -83,11 +88,13 @@
                     },
                     {
                         data: 'job_salary',
-                        name: 'job_salary'
+                        name: 'job_salary',
                     },
                     {
-                        data: 'created_at',
-                        name: 'created_at'
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'job_description',
@@ -106,10 +113,8 @@
                         name: 'website'
                     },
                     {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
+                        data: 'created_at',
+                        name: 'created_at'
                     }
                 ];
             }

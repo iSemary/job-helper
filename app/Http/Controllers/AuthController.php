@@ -45,7 +45,10 @@ class AuthController extends Controller {
         auth()->login($user);
 
         // Return a response indicating success
-        return response()->json(['message' => 'User registered successfully'], 200);
+        return response()->json([
+            'message' => 'User registered successfully',
+            'route' => route("panel.home")
+        ], 200);
     }
 
     public function logout() {

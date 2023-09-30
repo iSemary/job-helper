@@ -6,7 +6,7 @@
                 <div class="col-md-3">
                     <div class="card">
                         <div class="card-header text-center">
-                            <h3 class="card-title">Types</h3>
+                            <h3 class="card-title">Email Status</h3>
                         </div>
                         <div class="card-body p-0">
                             <div class="mx-2">
@@ -67,6 +67,7 @@
                                     <input type="hidden" id="companyId" name="company_id" value="">
                                 @endif
                                 <input type="hidden" id="coverLetterId" name="cover_letter_id" value="">
+                                <input type="hidden" id="emailMessageId" name="email_message_id" value="">
                                 <div class="form-group">
                                     <input class="form-control" name="to_address" id="toAddressInput" type="email"
                                         placeholder="To:" required>
@@ -114,10 +115,6 @@
                                         <div class="email-status"></div>
                                     </div>
                                     <div class="col-6 text-right">
-                                        <button type="button" id="sendMail" class="btn btn-sm btn-primary">
-                                            <i class="far fa-envelope"></i>
-                                            Preview
-                                        </button>
                                         <button type="submit" id="previewMail" class="btn btn-sm btn-success">
                                             <i class="far fa-envelope"></i>
                                             Send
@@ -194,6 +191,7 @@
             let coverLetter = [];
             coverLetter.file_path = $("#coverLetterSelector option:selected").attr("data-file-path");
             coverLetter.file_name = $("#coverLetterSelector option:selected").attr("data-file-name");
+            coverLetter.original_file_name = $("#coverLetterSelector option:selected").html();
 
             appendCoverLetterAttachment(coverLetter);
 
@@ -222,15 +220,20 @@
                 success: function(data) {
                     if (data.company) {
                         $("#companyId").val(data.company.id);
-                        if (data.company.email) {
-                            $("#toAddressInput").val(data.company.email);
+                        if (data.company.hr_email) {
+                            $("#toAddressInput").val(data.company.hr_email);
+                        } else {
+                            if (data.company.email) {
+                                $("#toAddressInput").val(data.company.email);
+                            }
+                        }
+
+                        if (data.company.motivation_message) {
+                            emailContent.setData(data.company.motivation_message.content);
+                            $("#emailMessageId").val(data.company.motivation_message.id)
                         }
 
                         if (data.company.job_title) {
-                            $("#subjectInput").val("Apply to " + data.company.job_title);
-                        }
-
-                        if (data.company.message) {
                             $("#subjectInput").val("Apply to " + data.company.job_title);
                         }
 
@@ -244,7 +247,7 @@
                             $.map(data.company.cover_letters, function(coverLetter, index) {
                                 $('#coverLetterSelector').append(
                                     `<option ${index == 0 ? "selected" : ""}
-                                    data-file-path="${coverLetter.original_file_name}"
+                                    data-file-path="${coverLetter.file_path}"
                                     data-file-name="${coverLetter.file_name}"
                                     value="${coverLetter.id}">#${coverLetter.id} ${coverLetter.original_file_name}</option>`
                                 );
@@ -258,7 +261,7 @@
 
 
                     } else {
-                        $("#companyId, #coverLetterId").val("");
+                        $("#companyId, #coverLetterId, #emailMessageId").val("");
                     }
                 },
             });

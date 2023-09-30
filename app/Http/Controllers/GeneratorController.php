@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\GPT;
+use App\Helpers\PromptFormatter;
 use App\Models\Company;
 use App\Models\CoverLetter;
+use App\Models\EmailMessage;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
 use Dompdf\Dompdf;
@@ -14,7 +16,6 @@ use Illuminate\Support\Facades\Storage;
 
 class GeneratorController extends Controller {
     private $openAiToken;
-
     const coverLetterPath = "user/cover-letter/";
 
     public function coverLetter() {
@@ -23,14 +24,24 @@ class GeneratorController extends Controller {
         return view("panel.generators.cover-letter", compact("userInfo", 'companies'));
     }
     public function motivationMessage() {
-        return view("panel.generators.motivation-message");
+        $userInfo = UserInfo::where('user_id', auth()->user()->id)->first();
+        $companies = Company::select('id', 'name')->where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+        $type = 1;
+        return view("panel.generators.motivation-message", compact("userInfo", 'companies', 'type'));
     }
+
+    public function reminderMessage() {
+        $userInfo = UserInfo::where('user_id', auth()->user()->id)->first();
+        $companies = Company::select('id', 'name')->where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+        $type = 2;
+        return view("panel.generators.motivation-message", compact("userInfo", 'companies', 'type'));
+    }
+
     public function company($id) {
         return view("panel.generators.cover-letter", compact("userInfo"));
     }
 
     public function downloadCoverLetter(Request $request) {
-
         $pdf = $this->generatePDFFile($request);
         if ($pdf['success']) {
             return response()->json(['message' => 'PDF Generated successfully', 'file_url' => $pdf['file_path']]);
@@ -76,28 +87,49 @@ class GeneratorController extends Controller {
         return $response;
     }
 
-    public function generateCoverLetter(Request $request): JsonResponse {
+    public function generate(Request $request, PromptFormatter $promptFormatter): JsonResponse {
         try {
-            // Get and decrypt open ai token
-            $openAiToken = UserInfo::where("user_id", auth()->user()->id)->first()->open_ai_token;
-            $openAiToken = $openAiToken;
-            $this->openAiToken = $openAiToken;
 
-            $coverLetterPrompt = $this->preparePromptMessage($request);
-            $response = $this->returnGPTResponse($coverLetterPrompt);
-
-            return response()->json(['message' => 'Cover Letter Generated successfully', 'data' => $response]);
+            $userInfo = UserInfo::where("user_id", auth()->user()->id)->first();
+            $company = Company::Auth()->where("id", $request->company_id)->first();
+            // Get decrypted open ai token
+            $this->openAiToken = $userInfo->open_ai_token;
+            // Prepare required data for prompt text
+            $data = [];
+            $data['job_title'] = $request->job_title;
+            $data['job_description'] = $request->job_description;
+            $data['company_name'] = $request->company_name;
+            $data['user_info'] = $userInfo;
+            $data['company'] = $company;
+            // Prepare Prompt Text
+            $prompt = $promptFormatter->prepare($request->prompt, $data);
+            // Send prompt to gpt and get response
+            $response = $this->returnGPTResponse($prompt);
+            return response()->json(['message' => 'Generated successfully', 'data' => $response]);
         } catch (Exception $e) {
             return response()->json(['message' => 'Failed to generate cover letter', "error" => $e->getMessage()], 500);
         }
     }
 
-    private function preparePromptMessage(Request $request): string {
-        return $request->prompt;
+
+
+    public function saveMessage(Request $request) {
+        try {
+            EmailMessage::updateOrCreate([
+                'company_id' => $request->company_id,
+                'type' => $request->type
+            ], [
+                'prompt' => $request->prompt,
+                'content' => $request->content,
+            ]);
+            return response()->json(['message' => 'Email Message saved successfully']);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Failed on saving email message ' . $e->getMessage()], 500);
+        }
     }
 
-    private function returnGPTResponse(string $coverLetterPrompt): array {
+    private function returnGPTResponse(string $textPrompt): array {
         $gpt = new GPT($this->openAiToken);
-        return $gpt->returnCompletions($coverLetterPrompt);
+        return $gpt->returnCompletions($textPrompt);
     }
 }

@@ -4,6 +4,7 @@ const csrfToken = $('meta[name="_token"]').attr("content");
 $(".switch-login, .switch-register").on("click", function (e) {
     $(".login-form, .register-form").toggleClass("d-none");
 });
+$('[data-toggle="tooltip"]').tooltip()
 
 $(document).on("click", ".page-switcher", function (e) {
     e.preventDefault();
@@ -23,7 +24,6 @@ $(document).on("click", ".page-switcher", function (e) {
                 targetDiv.html(data);
                 targetDiv.removeClass("loading");
                 history.pushState({ page: page }, null, page);
-                linkTag.addClass("active");
                 if (sideBarItem) {
                     removeSelectorFromSideBars();
                     sideBarItem.addClass("selected");
@@ -49,7 +49,7 @@ function removeSelectorFromSideBars() {
 
 $(".sidebar-item.multiple").on("click", function (e) {
     $(this).toggleClass("active");
-    $(this).find(".base-level-line").toggleClass("in");
+    // $(this).find(".base-level-line").toggleClass("in");
 });
 
 $(".toggle-sidebar").click(function (e) {
@@ -154,6 +154,8 @@ $(document).on("submit", "#createForm", function (e) {
 // PDF Loader
 // Function to load and display the PDF
 function loadPDF(pdfUrl, viewElementId) {
+    // Clear the old content 
+    document.getElementById(viewElementId).innerHTML = "";
     // Initialize PDF.js
     pdfjsLib.GlobalWorkerOptions.workerSrc =
         "/assets/plugins/pdfjs/js/worker.min.js";

@@ -11,11 +11,11 @@
     <meta name="_token" content="{{ csrf_token() }}">
     <title>Job Helper</title>
     {{-- Panel Assets --}}
+    <link href="{{ asset('assets/plugins/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
     @auth
         <link href="{{ asset('assets/plugins/c3/c3.min.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/plugins/chartist/chartist.min.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/plugins/jquery-jvectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet">
-        <link href="{{ asset('assets/plugins/fontawesome-free/css/all.min.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/plugins/DataTables/datatables.min.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/plugins/select2/select2.min.css') }}" rel="stylesheet">
@@ -34,7 +34,7 @@
             @include('layout.partials.header')
             @include('layout.partials.aside')
         @endauth
-        <div class="page-wrapper" style="display: block;">
+        <div class="page-wrapper @guest m-0 p-0 @endguest" style="display: block;">
             <div class="container-fluid">
                 <div class="page-content" id="content">
                     @yield('content')
@@ -59,7 +59,6 @@
         <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/DataTables/datatables.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/pdfjs/js/pdfjs.min.js') }}"></script>
-        <script src="{{ asset('assets/js/app.js') }}"></script>
     @endauth
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     @yield('scripts')
