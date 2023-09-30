@@ -5,15 +5,34 @@ namespace App\Http\Controllers;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
 use App\Helpers\Uploader;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 class UserController extends Controller {
-    public function edit() {
+    /**
+     * The "edit" function retrieves the user's information from the database and passes it to the view for
+     * editing.
+     * 
+     * @return View a view called "panel.user.info" and passing the variable  to the view.
+     */
+    public function edit(): View {
         $userInfo = [];
         $userInfo = UserInfo::where('user_id', auth()->user()->id)->first();
         return view("panel.user.info", compact('userInfo'));
     }
 
-    public function update(Request $request) {
+    /**
+     * The function updates the user information in the database based on the validated input data.
+     * 
+     * @param Request request The  parameter is an instance of the Request class, which represents
+     * an HTTP request. It contains all the data and information about the incoming request, such as the
+     * request method, headers, query parameters, form data, and uploaded files. In this code snippet, the
+     *  parameter is used to
+     * 
+     * @return JsonResponse A JSON response with the message "User info updated successfully" is being
+     * returned.
+     */
+    public function update(Request $request): JsonResponse {
         // Validate the input data
         $validatedData = $request->validate([
             'first_name' => 'required|string|max:255',

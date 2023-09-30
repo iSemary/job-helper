@@ -3,6 +3,18 @@
 namespace App\Helpers;
 
 class PromptFormatter {
+    /**
+     * The function prepares a formatted prompt by replacing placeholders with data values provided in an
+     * array.
+     * 
+     * @param string basePrompt The base prompt is a string that serves as the starting point for the
+     * formatted prompt. It may contain placeholders that will be replaced with actual values from the data
+     * array.
+     * @param array data The `data` parameter is an array that contains various pieces of information.
+     * Here's a breakdown of the keys and their corresponding values:
+     * 
+     * @return string a formatted prompt string.
+     */
     public function prepare(string $basePrompt, array $data): string {
         $formattedPrompt = $basePrompt;
         // Replace Major Vars
