@@ -92,18 +92,21 @@
                 contentType: false,
                 processData: false,
                 beforeSend: function() {
+                    waitingLoad();
                     $(".edit-status").html(
                         `<h6 class="text-muted"><i class="fas fa-circle-notch fa-spin"></i> Sending test mail, Please wait...</h6>`
                     );
                     formBtn.prop("disabled", true);
                 },
                 success: function(data) {
+                    normalLoad();
                     $(".edit-status").html(
                         `<h6 class="text-success"><i class="fas fa-check-circle"></i> ${data.message}</h6>`
                     );
                     formBtn.prop("disabled", false);
                 },
                 error: function(data) {
+                    errorLoad();
                     $(".edit-status").html(
                         `<h6 class="text-danger"><i class="fas fa-exclamation-triangle"></i> ` +
                         (data.responseJSON.message ?? "Something went wrong") +

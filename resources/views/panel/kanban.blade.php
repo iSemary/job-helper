@@ -38,8 +38,16 @@
                         status: newStatusId,
                         _token: csrfToken,
                     },
-                    dataType: "dataType",
-                    success: function(response) {}
+                    dataType: "json",
+                    beforeSend: function() {
+                        waitingLoad();
+                    },
+                    success: function(response) {
+                        normalLoad();
+                    },
+                    error: function(response) {
+                        errorLoad();
+                    }
                 });
             });
 

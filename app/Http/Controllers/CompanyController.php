@@ -76,7 +76,7 @@ class CompanyController extends Controller {
 
         // Save the new company record to the database
         $company->save();
-        return response()->json(['message' => 'Company record created successfully']);
+        return response()->json(['message' => 'Company record created successfully', 'status' => 200]);
     }
 
     public function update(Request $request, $id) {
@@ -102,7 +102,7 @@ class CompanyController extends Controller {
 
         // Update the company record with the validated data
         $company->update($validatedData);
-        return response()->json(['message' => 'Company record updated successfully']);
+        return response()->json(['message' => 'Company record updated successfully', 'status' => 200]);
     }
 
     public function importExcel() {
@@ -116,7 +116,7 @@ class CompanyController extends Controller {
             ]);
             $companiesSheet = $request->file('excel_file');
             Excel::import(new CompaniesImport(auth()->user()->id), $companiesSheet);
-            return response()->json(['message' => 'Company dataset imported successfully']);
+            return response()->json(['message' => 'Company dataset imported successfully', 'status' => 200]);
         } catch (\Exception $e) {
             return response()->json(['message' => "Error Code : " .  $e->getCode()], 500);
         }
@@ -124,7 +124,7 @@ class CompanyController extends Controller {
 
     public function destroy($id) {
         $company = Company::where('id', $id)->Auth()->delete();
-        return response()->json(['message' => 'Company record deleted successfully']);
+        return response()->json(['message' => 'Company record deleted successfully', 'status' => 200]);
     }
 
     public function updateStatus(Request $request) {
@@ -132,7 +132,7 @@ class CompanyController extends Controller {
         $company->status = $request->status;
         $company->save();
 
-        return response()->json(['message' => 'Company status updated successfully']);
+        return response()->json(['message' => 'Company status updated successfully', 'status' => 200]);
     }
 
     public function log($id) {

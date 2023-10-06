@@ -48,3 +48,42 @@
 .scroll-sidebar {
     overflow-y: scroll !important;
 }
+.loading-dots {
+    font-size: 10px;
+}
+.toggle-success {
+    animation: toggleSuccess 500ms infinite ease-in-out;
+}
+@keyframes toggleSuccess {
+    from {
+        color: #b8c3d5;
+    }
+    to {
+        color: #4caf50;
+    }
+}
+.toggle-error {
+    animation: toggleError 500ms infinite ease-in-out;
+}
+@keyframes toggleError {
+    from {
+        color: #b8c3d5;
+    }
+    to {
+        color: #e53935;
+    }
+}
+.toggle-loading {
+    animation: toggleLoading 500ms infinite ease-in-out;
+}
+@keyframes toggleLoading {
+    from {
+        color: #b8c3d5;
+    }
+    to {
+        color: #ff9800;
+    }
+}
+.pause-error {
+    color: #e53935;
+}

@@ -180,6 +180,7 @@
                 },
                 dataType: "json",
                 beforeSend: function() {
+                    waitingLoad();
                     if (!downloadFile) {
                         $(".cover-letter-status").html(
                             `<h6 class="text-muted"><i class="fas fa-circle-notch fa-spin"></i> Saving your cover letter...<h6/>`
@@ -187,6 +188,7 @@
                     }
                 },
                 success: function(response) {
+                    normalLoad();
                     if (response.file_url && downloadFile) {
                         var downloadLink = document.createElement('a');
                         downloadLink.href = response
@@ -204,6 +206,7 @@
                     }
                 },
                 error: function(data) {
+                    errorLoad();
                     console.log(data);
                 }
             });
@@ -298,14 +301,17 @@
                 },
                 dataType: "json",
                 beforeSend: function() {
+                    waitingLoad();
                     coverLetterContent.setData("Waiting for GPT to get a response, please wait...");
                 },
                 success: function(response) {
+                    normalLoad();
                     $("#generateCoverLetter").prop("disabled", false);
                     // coverLetterContent.setData(response.data);
                     coverLetterContent.setData(response.data.data.response);
                 },
                 error: function(data) {
+                    errorLoad();
                     $("#generateCoverLetter").prop("disabled", false);
                     console.log(data);
                 }

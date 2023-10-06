@@ -76,6 +76,6 @@ class UserController extends Controller {
         $userInfo->save();
 
         // Return a JSON response
-        return response()->json(['message' => 'User info updated successfully']);
+        return response()->json(['message' => 'User info updated successfully', 'status' => 200]);
     }
 }

@@ -71,7 +71,7 @@ class EmailCredentialController extends Controller {
         $emailCredentials->save();
 
         // Return a JSON response
-        return response()->json(['message' => 'Email credentials updated successfully']);
+        return response()->json(['message' => 'Email credentials updated successfully', 'status' => 200]);
     }
 
     /**
@@ -91,6 +91,6 @@ class EmailCredentialController extends Controller {
         MailerConfiguration::update($emailCredentials);
 
         Mail::mailer('custom')->to($emailCredentials->from_address)->send(new TestMail(''));
-        return response()->json(['message' => 'Test mail sent successfully']);
+        return response()->json(['message' => 'Test mail sent successfully', 'status' => 200]);
     }
 }

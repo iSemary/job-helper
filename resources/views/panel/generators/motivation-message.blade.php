@@ -164,16 +164,19 @@
                 },
                 dataType: "json",
                 beforeSend: function() {
+                    waitingLoad();
                     $(".message-status").html(
                         `<h6 class="text-muted"><i class="fas fa-circle-notch fa-spin"></i> Saving your message...<h6/>`
                     );
                 },
                 success: function(response) {
+                    normalLoad();
                     $(".message-status").html(
                         `<h6 class="text-success"><i class="fas fa-check-circle"></i> Message saved successfully.</h6>`
                     );
                 },
                 error: function(data) {
+                    errorLoad();
                     console.log(data);
                 }
             });
@@ -256,13 +259,16 @@
                 },
                 dataType: "json",
                 beforeSend: function() {
+                    waitingLoad();
                     messageContent.setData("Waiting for GPT to get a response, please wait...");
                 },
                 success: function(response) {
+                    normalLoad();
                     $("#generateMessage").prop("disabled", false);
                     messageContent.setData(response.data.data.response);
                 },
                 error: function(data) {
+                    errorLoad();
                     $("#generateMessage").prop("disabled", false);
                 }
             });

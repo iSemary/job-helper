@@ -85,17 +85,20 @@
                 type: 'POST',
                 data: formData,
                 beforeSend: function() {
+                    waitingLoad();
                     $(".login-status").html(
                         `<h6 class="alert alert-muted"><i class="fas fa-spinner fa-pulse"></i> Logging in...</h6>`
                     );
                 },
                 success: function(response) {
+                    normalLoad();
                     $(".login-status").html(
                         `<h6 class="alert alert-success"><i class="fas fa-check-circle"></i> Logged in successfully</h6>`
                     );
                     window.location.href = response.route;
                 },
                 error: function(response) {
+                    errorLoad();
                     $(".login-status").html(
                         `<h6 class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> ${response.responseJSON.message}</h6>`
                     );
@@ -112,17 +115,20 @@
                 type: 'POST',
                 data: formData,
                 beforeSend: function() {
+                    waitingLoad();
                     $(".register-status").html(
                         `<h6 class="alert alert-muted"><i class="fas fa-spinner fa-pulse"></i> Creating your account...</h6>`
                     );
                 },
                 success: function(response) {
+                    normalLoad();
                     $(".register-status").html(
                         `<h6 class="alert alert-success"><i class="fas fa-check-circle"></i> Account created successfully</h6>`
                     );
                     window.location.href = response.route;
                 },
                 error: function(response) {
+                    errorLoad();
                     $(".register-status").html(
                         `<h6 class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> ${response.responseJSON.message}</h6>`
                     );

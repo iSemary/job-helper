@@ -293,18 +293,21 @@
                 contentType: false,
                 processData: false,
                 beforeSend: function() {
+                    waitingLoad();
                     $(".email-status").html(
                         `<h6 class="text-muted"><i class="fas fa-circle-notch fa-spin"></i> Updating, please wait...</h6>`
                     );
                     formBtn.prop("disabled", true);
                 },
                 success: function(data) {
+                    normalLoad();
                     $(".email-status").html(
                         `<h6 class="text-success"><i class="fas fa-check-circle"></i> ${data.message}</h6>`
                     );
                     formBtn.prop("disabled", false);
                 },
                 error: function(xhr) {
+                    errorLoad();
                     $(".email-status").html("");
                     formBtn.prop("disabled", false);
                     $(".email-status").html(

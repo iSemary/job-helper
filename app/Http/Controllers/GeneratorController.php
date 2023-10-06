@@ -34,7 +34,7 @@ class GeneratorController extends Controller {
         $userInfo = UserInfo::where('user_id', auth()->user()->id)->first();
         $companies = Company::select('id', 'name')->where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         $type = 2;
-        return view("panel.generators.motivation-message", compact("userInfo", 'companies', 'type'));
+        return view("panel.generators.reminder-message", compact("userInfo", 'companies', 'type'));
     }
 
     public function company($id) {
@@ -122,7 +122,7 @@ class GeneratorController extends Controller {
                 'prompt' => $request->prompt,
                 'content' => $request->content,
             ]);
-            return response()->json(['message' => 'Email Message saved successfully']);
+            return response()->json(['message' => 'Email Message saved successfully', 'status' => 200]);
         } catch (Exception $e) {
             return response()->json(['message' => 'Failed on saving email message ' . $e->getMessage()], 500);
         }

@@ -13,6 +13,10 @@
             <ul class="navbar-nav float-left me-auto ms-3 ps-1"></ul>
             <ul class="navbar-nav float-end">
                 <li class="nav-item">
+                    <span class="me-3 loading-dots">
+                        <i class="success-load fas fa-circle"></i>
+                        <i class="waiting-load fas fa-circle"></i>
+                    </span>
                     <a href="#" class="toggle-sidebar">
                         <i class="fas fa-bars text-primary"></i>
                     </a>

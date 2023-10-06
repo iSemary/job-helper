@@ -4,7 +4,7 @@ const csrfToken = $('meta[name="_token"]').attr("content");
 $(".switch-login, .switch-register").on("click", function (e) {
     $(".login-form, .register-form").toggleClass("d-none");
 });
-$('[data-toggle="tooltip"]').tooltip()
+$('[data-toggle="tooltip"]').tooltip();
 
 $(document).on("click", ".page-switcher", function (e) {
     e.preventDefault();
@@ -15,12 +15,14 @@ $(document).on("click", ".page-switcher", function (e) {
     targetDiv.addClass("loading");
 
     if (page && page != "") {
+        waitingLoad();
         $.ajax({
             url: page,
             type: "GET",
             "X-Requested-With": "XMLHttpRequest",
             dataType: "html",
             success: function (data) {
+                normalLoad();
                 targetDiv.html(data);
                 targetDiv.removeClass("loading");
                 history.pushState({ page: page }, null, page);
@@ -30,6 +32,7 @@ $(document).on("click", ".page-switcher", function (e) {
                 }
             },
             error: function (xhr, status, error) {
+                errorLoad();
                 targetDiv.removeClass("loading");
                 console.error("Error loading content:", error);
             },
@@ -78,12 +81,14 @@ $(document).on("submit", "#editForm", function (e) {
         contentType: false,
         processData: false,
         beforeSend: function () {
+            waitingLoad();
             $(".edit-status").html(
                 `<h6 class="text-muted"><i class="fas fa-circle-notch fa-spin"></i> Updating, please wait...</h6>`
             );
             formBtn.prop("disabled", true);
         },
         success: function (data) {
+            normalLoad();
             $(".edit-status").html(
                 `<h6 class="text-success"><i class="fas fa-check-circle"></i> ${data.message}</h6>`
             );
@@ -91,6 +96,7 @@ $(document).on("submit", "#editForm", function (e) {
             $(".dataTable").DataTable().ajax.reload();
         },
         error: function (xhr) {
+            errorLoad();
             $(".edit-status").html("");
             formBtn.prop("disabled", false);
             $(".edit-status").append(
@@ -118,12 +124,14 @@ $(document).on("submit", "#createForm", function (e) {
         contentType: false,
         processData: false,
         beforeSend: function () {
+            waitingLoad();
             $(".create-status").html(
                 `<h6 class="text-muted"><i class="fas fa-circle-notch fa-spin"></i> Creating, Please wait...</h6>`
             );
             formBtn.prop("disabled", true);
         },
         success: function (data) {
+            normalLoad();
             $(".create-status").html(
                 `<h6 class="text-success"><i class="fas fa-check-circle"></i> ${data.message}</h6>`
             );
@@ -136,6 +144,7 @@ $(document).on("submit", "#createForm", function (e) {
             $(".dataTable").DataTable().ajax.reload();
         },
         error: function (data) {
+            errorLoad();
             $(".create-status").html("");
             formBtn.prop("disabled", false);
             console.log(data);
@@ -154,7 +163,7 @@ $(document).on("submit", "#createForm", function (e) {
 // PDF Loader
 // Function to load and display the PDF
 function loadPDF(pdfUrl, viewElementId) {
-    // Clear the old content 
+    // Clear the old content
     document.getElementById(viewElementId).innerHTML = "";
     // Initialize PDF.js
     pdfjsLib.GlobalWorkerOptions.workerSrc =
@@ -268,6 +277,7 @@ function deleteRow(link, type) {
         cancelButtonText: "Cancel",
     }).then((result) => {
         if (result.value) {
+            waitingLoad();
             $.ajax({
                 url: link,
                 type: "DELETE",
@@ -276,6 +286,7 @@ function deleteRow(link, type) {
                 },
             })
                 .done(function (data) {
+                    normalLoad();
                     Swal.fire({
                         text: type + " deleted successfully",
                         confirmButtonText: "ok",
@@ -286,6 +297,7 @@ function deleteRow(link, type) {
                     $(".dataTable").DataTable().ajax.reload();
                 })
                 .fail(function (data) {
+                    errorLoad();
                     Swal.fire({
                         text: data.message,
                         type: "error",
@@ -329,3 +341,32 @@ $(document).ready(function () {
         $("#viewFileModal").modal("show");
     });
 });
+
+function normalLoad() {
+    $(".success-load")
+        .addClass("toggle-success")
+        .removeClass("toggle-error pause-error toggle-loading toggle-loading");
+    $(".waiting-load")
+        .addClass("toggle-loading")
+        .removeClass("toggle-success toggle-error toggle-loading pause-error");
+}
+function errorLoad() {
+    $(".success-load")
+        .addClass("toggle-error")
+        .removeClass(
+            "toggle-success pause-error toggle-loading toggle-loading"
+        );
+    $(".waiting-load")
+        .addClass("pause-error")
+        .removeClass(
+            "toggle-success toggle-error toggle-loading toggle-loading"
+        );
+}
+function waitingLoad() {
+    $(".success-load")
+        .addClass("toggle-loading")
+        .removeClass("toggle-success toggle-error pause-error");
+    $(".waiting-load")
+        .addClass("toggle-loading")
+        .removeClass("toggle-success toggle-error pause-error");
+}
