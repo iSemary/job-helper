@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\MailerConfiguration;
 use App\Interfaces\CompanyStatusesInterface;
 use App\Mail\ApplyMail;
+use App\Mail\ReminderMail;
 use App\Models\Company;
 use App\Models\CoverLetter;
 use App\Models\Email;
@@ -74,7 +75,7 @@ class EmailController extends Controller {
                 ->first();
 
 
-            $mailData = $this->prepareMailData($validatedData);
+            $mailData = $this->prepareApplyMailData($validatedData);
 
             Mail::mailer('custom')->to($mailData['to'])->send(new ApplyMail($mailData));
 
@@ -109,14 +110,14 @@ class EmailController extends Controller {
 
 
     /**
-     * The function `prepareMailData` prepares the data needed to send an email, including the recipient,
+     * The function `prepareApplyMailData` prepares the data needed to send an email, including the recipient,
      * subject, body, and attachments.
      * 
      * @param array data An array containing the following keys:
      * 
      * @return array an array called .
      */
-    private function prepareMailData(array $data): array {
+    private function prepareApplyMailData(array $data): array {
         $mailData = [];
         $mailData['to'] = $data['to_address'];
         $mailData['subject'] = $data['subject'];
@@ -137,6 +138,62 @@ class EmailController extends Controller {
         // TODO Add user attachments
 
         $mailData['user_attachments'] = $attachments;
+        return $mailData;
+    }
+
+
+    public function sendReminder(Request $request): JsonResponse {
+        DB::beginTransaction();
+        try {
+            $validatedData = $request->validate([
+                'company_id' => 'required|max:255',
+                'to_address' => 'required|email|max:255',
+                'subject' => 'required|max:255',
+                'message' => 'required',
+            ]);
+
+            // Apply email credentials configuration
+            $emailCredentials = EmailCredentials::where('user_id', auth()->user()->id)->first();
+            MailerConfiguration::update($emailCredentials);
+
+            $mailData = $this->prepareReminderMailData($validatedData);
+            Mail::mailer('custom')->to($validatedData['to_address'])->send(new ReminderMail($mailData));
+
+            // Mark the company as sent email
+            Company::where("id", $validatedData['company_id'])->update(["status" => CompanyStatusesInterface::SENT_REMINDER['id']]);
+            // Save Email Data
+            Email::create([
+                'user_id' => auth()->user()->id,
+                'company_id' => $request->company_id,
+                'email_message_id' => null,
+                'cover_letter_id' => null,
+                'message_content' => $request->message,
+                'status' => 1,
+                'type' => 2
+            ]);
+            DB::commit();
+            return response()->json(['message' => "Reminder sent successfully"], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => $e->getTrace(), 'line' => $e->getLine()], 400);
+        }
+    }
+
+
+
+    /**
+     * The function `prepareReminderMailData` prepares the data needed to send an email, including the recipient,
+     * subject, body
+     * 
+     * @param array data An array containing the following keys:
+     * 
+     * @return array an array called .
+     */
+    private function prepareReminderMailData(array $data): array {
+        $mailData = [];
+        $mailData['to'] = $data['to_address'];
+        $mailData['subject'] = $data['subject'];
+        $mailData['body'] = $data['message'];
         return $mailData;
     }
 }

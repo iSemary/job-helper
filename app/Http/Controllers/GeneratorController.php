@@ -6,6 +6,7 @@ use App\Helpers\GPT;
 use App\Helpers\PromptFormatter;
 use App\Models\Company;
 use App\Models\CoverLetter;
+use App\Models\Email;
 use App\Models\EmailMessage;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
@@ -89,23 +90,33 @@ class GeneratorController extends Controller {
 
     public function generate(Request $request, PromptFormatter $promptFormatter): JsonResponse {
         try {
-
             $userInfo = UserInfo::where("user_id", auth()->user()->id)->first();
-            $company = Company::Auth()->where("id", $request->company_id)->first();
             // Get decrypted open ai token
             $this->openAiToken = $userInfo->open_ai_token;
             // Prepare required data for prompt text
             $data = [];
-            $data['job_title'] = $request->job_title;
-            $data['job_description'] = $request->job_description;
-            $data['company_name'] = $request->company_name;
-            $data['user_info'] = $userInfo;
-            $data['company'] = $company;
+
+            switch ($request->type) {
+                case '1': // Motivation Message
+                    $company = Company::Auth()->where("id", $request->company_id)->first();
+                    $data['job_title'] = $request->job_title;
+                    $data['job_description'] = $request->job_description;
+                    $data['company_name'] = $request->company_name;
+                    $data['user_info'] = $userInfo;
+                    $data['company'] = $company;
+                    break;
+                case '2': // Reminder Message
+                    $data['company_name'] = $request->company_name;
+                    $data['apply_mail'] = $request->apply_mail;
+                    break;
+                default:
+                    break;
+            }
             // Prepare Prompt Text
             $prompt = $promptFormatter->prepare($request->prompt, $data);
             // Send prompt to gpt and get response
             $response = $this->returnGPTResponse($prompt);
-            return response()->json(['message' => 'Generated successfully', 'data' => $response]);
+            return response()->json(['message' => 'Generated successfully', 'data' => $response, 'prompt' => $prompt]);
         } catch (Exception $e) {
             return response()->json(['message' => 'Failed to generate cover letter', "error" => $e->getMessage()], 500);
         }

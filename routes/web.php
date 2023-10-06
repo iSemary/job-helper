@@ -57,5 +57,6 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('email/apply', [EmailController::class, 'index'])->name('email.apply');
         Route::post('email/send', [EmailController::class, 'send'])->name('email.send');
+        Route::post('email/send-reminder', [EmailController::class, 'sendReminder'])->name('email.sendReminder');
     });
 });

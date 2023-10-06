@@ -13,8 +13,8 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('company_id');
-            $table->unsignedBigInteger('email_message_id');
-            $table->unsignedBigInteger('cover_letter_id');
+            $table->unsignedBigInteger('email_message_id')->nullable();
+            $table->unsignedBigInteger('cover_letter_id')->nullable();
             $table->longText('message_content')->nullable();
             $table->tinyInteger('status')->nullable();
             $table->tinyInteger('type')->nullable();

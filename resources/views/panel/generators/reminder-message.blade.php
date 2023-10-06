@@ -11,10 +11,7 @@
                 <div>
                     <h5 for="">GPT Prompt Text</h5>
                     <textarea name="prompt" id="prompt" class="form-control" placeholder="Enter job GPT prompt text" cols="30"
-                        rows="10">Draft a motivational email message in "html format" and just send the email message body only, using the following variables to send to a prospective employer when applying for the [Job Title] position at [Company Name], and job description [Job Description].
-                        Your email should convey your enthusiasm for the role, showcase your relevant skills, and explain why you are the ideal candidate for the job.
-                        
-                        Ensure that your email maintains a professional and engaging tone to leave a lasting impression on the employer.</textarea>
+                        rows="10">Generate a reminder email message in HTML format and ONLY write the body of the email, Based on the email I sent and didn’t get any response, and very interested in getting feedback, Applied email content : [Apply Mail]</textarea>
                 </div>
             </div>
             <div class="col-4">
@@ -50,31 +47,54 @@
                 </div>
                 <div class="my-2">
                     <button class="btn btn-sm btn-outline-info w-100" type="button" data-toggle="collapse"
-                        data-target="#collapseJobTitle" aria-expanded="false" aria-controls="collapseJobTitle">
-                        Job Title <i class="fas fa-sort-down"></i>
+                        data-target="#collapseApplyMail" aria-expanded="false" aria-controls="collapseApplyMail">
+                        Apply Mail <i class="fas fa-sort-down"></i>
                     </button>
-                    <div class="collapse" id="collapseJobTitle">
+                    <div class="collapse" id="collapseApplyMail">
                         <div class="card card-body p-2">
-                            <input name="job_title" class="form-control" id="jobTitle" placeholder="Enter job title" />
+                            <textarea name="apply_mail" class="form-control" placeholder="Enter applied mail content" id="applyMail" cols="30"
+                                rows="10"></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="my-2">
                     <button class="btn btn-sm btn-outline-info w-100" type="button" data-toggle="collapse"
-                        data-target="#collapseJobDescription" aria-expanded="false" aria-controls="collapseJobDescription">
-                        Job Description <i class="fas fa-sort-down"></i>
+                        data-target="#collapseReminderSubject" aria-expanded="false"
+                        aria-controls="collapseReminderSubject">
+                        Reminder Subject <i class="fas fa-sort-down"></i>
                     </button>
-                    <div class="collapse" id="collapseJobDescription">
+                    <div class="collapse" id="collapseReminderSubject">
                         <div class="card card-body p-2">
-                            <textarea name="job_description" class="form-control" placeholder="Enter job description content" id="jobDescription"
-                                cols="30" rows="10"></textarea>
+                            <input name="subject" class="form-control font-12" id="reminderSubject"
+                                placeholder="Enter reminder email subject" value="" />
                         </div>
                     </div>
                 </div>
                 <div class="my-2">
-                    <button class="btn btn-sm btn-warning w-100" type="button" id="saveMessage" disabled>
-                        <i class="fas fa-save"></i> Save Message
+                    <button class="btn btn-sm btn-outline-info w-100" type="button" data-toggle="collapse"
+                        data-target="#collapseReminderEmail" aria-expanded="false" aria-controls="collapseReminderEmail">
+                        To Address <i class="fas fa-sort-down"></i>
                     </button>
+                    <div class="collapse" id="collapseReminderEmail">
+                        <div class="card card-body p-2">
+                            <input name="to_address" class="form-control font-12" id="reminderEmail"
+                                placeholder="Enter reminder email to address" value="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="my-2">
+                    <div class="row">
+                        <div class="col-6 pe-0">
+                            <button class="btn btn-sm btn-primary w-100" type="button" id="sendReminder" disabled>
+                                <i class="fas fa-paper-plane"></i> Send Reminder
+                            </button>
+                        </div>
+                        <div class="col-6 ps-0">
+                            <button class="btn btn-sm btn-warning w-100" type="button" id="saveMessage" disabled>
+                                <i class="fas fa-save"></i> Save Message
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <h6 class="message-status"></h6>
                 <hr>
@@ -97,6 +117,7 @@
 
 @push('extra-scripts')
     <script>
+        let type = `{{ $type }}`;
         // CKeditor message Content
         var messageContent = CKEDITOR.replace('messageContent', {
             toolbar: [{
@@ -127,7 +148,7 @@
             ]
         });
         // Check Status of companyName, jobTitle, jobDescription
-        $(document).on("change keyup paste", "#jobDescription, #jobTitle, #companyName", function(e) {
+        $(document).on("change keyup paste", "#applyMail, #companyName", function(e) {
             let statusSpan = "#" + $(this).attr('id') + "Status";
             if ($(this).val() == "") {
                 switchWarningStatus(statusSpan);
@@ -139,8 +160,8 @@
         $(document).on("click", "#clearInputs", function(e) {
             messageContent.setData('');
             $("#companySelector").val("");
-            $("#jobDescription, #jobTitle, #companyName, #MessageContent").val("");
-            switchWarningStatus("#jobDescriptionStatus, #jobTitleStatus, #companyNameStatus");
+            $("#applyMail, #companyName, #MessageContent").val("");
+            switchWarningStatus("#applyMailStatus, #companyNameStatus");
         });
 
         // Save Message 
@@ -148,7 +169,6 @@
             let companyId = $("#companySelector").val();
             let prompt = $("#prompt").val();
             let fileContent = messageContent.getData();
-            let type = `{{ $type }}`;
             $.ajax({
                 url: `{{ route('panel.generator.message.save') }}`,
                 method: "POST",
@@ -179,12 +199,51 @@
             });
         });
 
+        // Save Message 
+        $(document).on("click", "#sendReminder", function(e) {
+            let btn = $(this);
+            let companyId = $("#companySelector").val();
+            let reminderSubject = $("#reminderSubject").val();
+            let reminderEmail = $("#reminderEmail").val();
+            let fileContent = messageContent.getData();
+            $.ajax({
+                url: `{{ route('panel.email.sendReminder') }}`,
+                method: "POST",
+                data: {
+                    company_id: companyId,
+                    to_address: reminderEmail,
+                    subject: reminderSubject,
+                    message: fileContent,
+                    _token: csrfToken,
+                },
+                dataType: "json",
+                beforeSend: function() {
+                    btn.prop("disabled", true);
+                    waitingLoad();
+                    $(".message-status").html(
+                        `<h6 class="text-muted"><i class="fas fa-circle-notch fa-spin"></i> Sending your reminder email...<h6/>`
+                    );
+                },
+                success: function(response) {
+                    btn.prop("disabled", false);
+                    normalLoad();
+                    $(".message-status").html(
+                        `<h6 class="text-success"><i class="fas fa-check-circle"></i> Reminder sent successfully.</h6>`
+                    );
+                },
+                error: function(data) {
+                    btn.prop("disabled", false);
+                    errorLoad();
+                    console.log(data);
+                }
+            });
+        });
         // Listen message Changes 
         messageContent.on('change', function() {
             if (messageContent.getData() == '') {
-                $("#saveLetter").prop("disabled", true);
+                $("#saveMessage, #sendReminder").prop("disabled", true);
             } else {
-                $("#saveLetter").prop("disabled", false);
+                $("#saveMessage, #sendReminder").prop("disabled", false);
             }
         });
 
@@ -206,7 +265,6 @@
                 processData: false,
                 beforeSend: function() {
                     waitingLoad();
-
                 },
                 success: function(data) {
                     normalLoad();
@@ -217,17 +275,24 @@
                         } else {
                             switchWarningStatus("#companyNameStatus");
                         }
-                        if (data.company.job_title) {
-                            $("#jobTitle").val(data.company.job_title);
-                            switchSuccessStatus("#jobTitleStatus");
+
+                        if (data.company.hr_email) {
+                            $("#reminderEmail").val(data.company.hr_email);
                         } else {
-                            switchWarningStatus("#jobTitleStatus");
+                            if (data.company.email) {
+                                $("#reminderEmail").val(data.company.email);
+                            }
                         }
-                        if (data.company.job_description) {
-                            $("#jobDescription").val(data.company.job_description);
-                            switchSuccessStatus("#jobDescriptionStatus");
+
+                        if (data.company.job_title) {
+                            $("#reminderSubject").val("Reminder to apply to " + data.company.job_title);
+                        }
+
+                        if (data.company.motivation_message) {
+                            $("#applyMail").val(data.company.motivation_message.content);
+                            switchSuccessStatus("#applyMailStatus");
                         } else {
-                            switchWarningStatus("#jobDescriptionStatus");
+                            switchWarningStatus("#applyMailStatus");
                         }
                     }
                 },
@@ -241,14 +306,13 @@
             generateMessage(
                 $("#companySelector").val(),
                 $("#companyName").val(),
-                $("#jobTitle").val(),
-                $("#jobDescription").val(),
+                $("#applyMail").val(),
                 $("#prompt").val(),
             );
         });
 
         // Generate message
-        function generateMessage(companyId, companyName, jobTitle, jobDescription, prompt) {
+        function generateMessage(companyId, companyName, applyMail, prompt) {
             $("#generateMessage").prop("disabled", true);
             $.ajax({
                 url: `{{ route('panel.generator.generate') }}`,
@@ -256,8 +320,8 @@
                 data: {
                     company_id: companyId,
                     company_name: companyName,
-                    job_title: jobTitle,
-                    job_description: jobDescription,
+                    apply_mail: applyMail,
+                    type: type,
                     prompt: prompt,
                     _token: csrfToken,
                 },

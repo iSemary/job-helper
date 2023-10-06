@@ -18,9 +18,15 @@ class PromptFormatter {
     public function prepare(string $basePrompt, array $data): string {
         $formattedPrompt = $basePrompt;
         // Replace Major Vars
-        $formattedPrompt = str_replace('[Job Description]', $data['job_description'], $formattedPrompt);
-        $formattedPrompt = str_replace('[Job Title]', $data['job_title'], $formattedPrompt);
-        $formattedPrompt = str_replace('[Company Name]', $data['company_name'], $formattedPrompt);
+        if (isset($data['job_description']))
+            $formattedPrompt = str_replace('[Job Description]', $data['job_description'], $formattedPrompt);
+        if (isset($data['job_title']))
+            $formattedPrompt = str_replace('[Job Title]', $data['job_title'], $formattedPrompt);
+        if (isset($data['company_name']))
+            $formattedPrompt = str_replace('[Company Name]', $data['company_name'], $formattedPrompt);
+        if (isset($data['apply_mail']))
+            $formattedPrompt = str_replace('[Apply Mail]', $data['apply_mail'], $formattedPrompt);
+
         // Add company details if exists [Industry, Hr Name, Hr Email, Job Salary]
         if (isset($data['company'])) {
             if (isset($data['company']['industry'])) {
