@@ -11,7 +11,6 @@ Apply to your dream job with a powerful Cover Letter and a motivational message 
 - Generate Cover Letters / Motivation Messages based on job description and your qualifications
 - Store and save your desired company dataset
 - Import Excel sheets with companies dataset
-- Bulk Email Sending using Asynchronous
 - Reminder and follow up Emails
 - Kanban Board to organize companies applied to
 
