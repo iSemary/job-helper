@@ -43,6 +43,10 @@ php artisan migrate
 ```
 
 ```bash
+php artisan queue:work
+```
+
+```bash
  php artisan serve 🚀
 ```
 
