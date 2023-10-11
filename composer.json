@@ -12,12 +12,13 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "maatwebsite/excel": "^3.1",
+        "php-amqplib/php-amqplib": "^3.5",
         "yajra/laravel-datatables": "^10.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
-        "laravel/sail": "^1.18",
+        "laravel/sail": "^1.25",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
         "phpunit/phpunit": "^10.1",

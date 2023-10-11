@@ -22,7 +22,6 @@ class CompanyController extends Controller {
                     $btn = '<div class="w-100">';
                     $btn .= '<button type="button" data-toggle="tooltip" data-placement="top" title="Edit" data-url="' . route('panel.companies.edit', $row->id) . '" class="btn btn-primary btn-sm open-modal-btn"><i class="far fa-edit"></i></button>';
                     $btn .= '<button type="button" data-toggle="tooltip" data-placement="top" title="Delete" data-delete-type="company" data-url="' . route('panel.companies.destroy', $row->id) . '" class="btn btn-danger btn-sm delete-btn"><i class="fa fa-trash"></i></button>';
-                    $btn .= '<button type="button" data-toggle="tooltip" data-placement="top" title="Generate" data-url="' . route('panel.companies.edit', $row->id) . '" class="btn btn-purple btn-sm open-modal-btn"><i class="fas fa-magic"></i></button>';
                     $btn .= '<button type="button" data-toggle="tooltip" data-placement="top" title="Log" data-url="' . route('panel.companies.log', $row->id) . '" class="btn btn-warning btn-sm open-modal-btn"><i class="fas fa-history"></i></button>';
                     $btn .= '</div>';
                     return $btn;
