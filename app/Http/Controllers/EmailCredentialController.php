@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\MailerConfiguration;
-use App\Mail\TestMail;
+use App\Jobs\SendTestJob;
 use App\Models\EmailCredentials;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class EmailCredentialController extends Controller {
@@ -87,10 +85,7 @@ class EmailCredentialController extends Controller {
         if (!$emailCredentials) {
             return response()->json(['message' => 'Email credentials not exists'], 500);
         }
-
-        MailerConfiguration::update($emailCredentials);
-
-        Mail::mailer('custom')->to($emailCredentials->from_address)->send(new TestMail(''));
+        SendTestJob::dispatch($emailCredentials);
         return response()->json(['message' => 'Test mail sent successfully', 'status' => 200]);
     }
 }

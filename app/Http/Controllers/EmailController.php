@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\MailerConfiguration;
 use App\Interfaces\CompanyStatusesInterface;
-use App\Mail\ApplyMail;
-use App\Mail\ReminderMail;
+use App\Jobs\SendApplyJob;
+use App\Jobs\SendReminderJob;
 use App\Models\Company;
 use App\Models\CoverLetter;
 use App\Models\Email;
@@ -17,7 +16,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class EmailController extends Controller {
@@ -61,10 +59,6 @@ class EmailController extends Controller {
              * Prepare and send apply email
              */
 
-            $emailCredentials = EmailCredentials::where('user_id', auth()->user()->id)->first();
-
-            MailerConfiguration::update($emailCredentials);
-
             $validatedData['resume'] = UserInfo::select('resume', 'resume_file_name')
                 ->where("user_id", auth()->user()->id)
                 ->first();
@@ -74,11 +68,12 @@ class EmailController extends Controller {
                 ->where("user_id", auth()->user()->id)
                 ->first();
 
-
+            // Prepared email data
             $mailData = $this->prepareApplyMailData($validatedData);
 
-            Mail::mailer('custom')->to($mailData['to'])->send(new ApplyMail($mailData));
-
+            $emailCredentials = EmailCredentials::where('user_id', auth()->user()->id)->first();
+            // Add sending email job to queue
+            SendApplyJob::dispatch($emailCredentials, $mailData);
             // Mark the company as sent email
             Company::where("id", $validatedData['company_id'])->update(["status" => CompanyStatusesInterface::SENT_APPLY['id']]);
             // Mark the cover letter as sent
@@ -128,12 +123,12 @@ class EmailController extends Controller {
         $attachments = [];
         // Resume attachment
         $attachments['resume']['name'] = $data['resume']['resume_file_name'];
-        $attachments['resume']['path'] = 'storage/user/resume/' . basename($data['resume']['resume']);
+        $attachments['resume']['path'] =  asset('storage/user/resume/' . basename($data['resume']['resume']));
         $attachments['resume']['mime'] = 'application/' . Str::afterLast($data['resume']['resume'], '.');
 
         // Cover letter attachment
         $attachments['cover_letter']['name'] = $data['cover_letter']['original_file_name'];
-        $attachments['cover_letter']['path'] = 'storage/user/cover-letter/' . $data['cover_letter']['file_name'];
+        $attachments['cover_letter']['path'] = asset('storage/user/cover-letter/' . $data['cover_letter']['file_name']);
         $attachments['cover_letter']['mime'] = 'application/' . Str::afterLast($data['cover_letter']['file_path'], '.');
         // TODO Add user attachments
 
@@ -154,11 +149,10 @@ class EmailController extends Controller {
 
             // Apply email credentials configuration
             $emailCredentials = EmailCredentials::where('user_id', auth()->user()->id)->first();
-            MailerConfiguration::update($emailCredentials);
-
+            // Prepared email data
             $mailData = $this->prepareReminderMailData($validatedData);
-            Mail::mailer('custom')->to($validatedData['to_address'])->send(new ReminderMail($mailData));
-
+            // Add sending email job to queue
+            SendReminderJob::dispatch($emailCredentials, $mailData);
             // Mark the company as sent email
             Company::where("id", $validatedData['company_id'])->update(["status" => CompanyStatusesInterface::SENT_REMINDER['id']]);
             // Save Email Data

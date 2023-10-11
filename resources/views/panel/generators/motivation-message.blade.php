@@ -185,9 +185,9 @@
         // Listen message Changes 
         messageContent.on('change', function() {
             if (messageContent.getData() == '') {
-                $("#saveLetter").prop("disabled", true);
+                $("#saveMessage").prop("disabled", true);
             } else {
-                $("#saveLetter").prop("disabled", false);
+                $("#saveMessage").prop("disabled", false);
             }
         });
 
