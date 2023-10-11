@@ -8,12 +8,11 @@ Apply to your dream job with a powerful Cover Letter and a motivational message 
 
 # 🔑 Key Features:
 
--   Generate Cover Letters / Motivation Messages based on job description and your qualifications
--   Store and save your desired company dataset
--   Import Excel sheets with companies dataset
--   Bulk Email Sending using Asynchronous
--   Reminder and follow up Emails
--   Kanban Board to organize companies applied to
+- Generate Cover Letters / Motivation Messages based on job description and your qualifications
+- Store and save your desired company dataset
+- Import Excel sheets with companies dataset
+- Reminder and follow up Emails
+- Kanban Board to organize companies applied to
 
 🔐 Email credentials are fully encrypted with a secret hash key.
 
@@ -26,6 +25,7 @@ Apply to your dream job with a powerful Cover Letter and a motivational message 
 5. Select the company you want to apply to, then:
     1. Generate cover letter file
     2. Generate motivation message
+<<<<<<< HEAD
     3. One click to apply apply 📨
 6. Organize companies using kanban board
 
@@ -84,3 +84,7 @@ https://platform.openai.com/account/api-keys
 
 -   Create a new secret key or use any existing key
 -   Save your key into “Profile Details” Section
+=======
+    3. On click apply 📨
+6. Organize companies using kanban board
+>>>>>>> efbbd07b31d133efa107cd8eb11c19f01baa5a07
