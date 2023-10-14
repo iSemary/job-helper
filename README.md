@@ -1,3 +1,8 @@
+<div style="display:flex; justify-content:space-around;margin-bottom:10px;">
+<img src="./public/assets/images/laravel.png" width="35px" height="35px" alt="laravel" />
+<img src="./public/assets/images/openai.png" width="45px" height="45px" alt="openai" />
+</div>
+
 # **The “All In One CRM” for Job Seekers**
 
 Ai not gonna take your job unless you start working with it! 🤖
@@ -8,11 +13,11 @@ Apply to your dream job with a powerful Cover Letter and a motivational message 
 
 # 🔑 Key Features:
 
-- Generate Cover Letters / Motivation Messages based on job description and your qualifications
-- Store and save your desired company dataset
-- Import Excel sheets with companies dataset
-- Reminder and follow up Emails
-- Kanban Board to organize companies applied to
+-   Generate Cover Letters / Motivation Messages based on job description and your qualifications
+-   Store and save your desired company dataset
+-   Import Excel sheets with companies dataset
+-   Reminder and follow up Emails
+-   Kanban Board to organize companies applied to
 
 🔐 Email credentials are fully encrypted with a secret hash key.
 
@@ -86,6 +91,6 @@ After you get your full configuration, Go to “Email Credentials” section and
 https://platform.openai.com/account/api-keys
 
 -   Create a new secret key or use any existing key
--   Save your key into “Profile Details” Section
-    3. On click apply 📨
+-   Save your key into “Profile Details” Section 3. On click apply 📨
+
 6. Organize companies using kanban board
