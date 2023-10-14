@@ -6,7 +6,7 @@ Your job application will take less than 2 minutes using these features which wi
 
 Apply to your dream job with a powerful Cover Letter and a motivational message to impress recruiters to be on top of their candidates list.
 
-# 🔑 Key Features:
+## 🔑 Key Features:
 
 -   Generate Cover Letters / Motivation Messages based on job description and your qualifications
 -   Store and save your desired company dataset
@@ -16,7 +16,7 @@ Apply to your dream job with a powerful Cover Letter and a motivational message 
 
 🔐 Email credentials are fully encrypted with a secret hash key.
 
-# Get Started
+## Get Started
 
 1. Register a new account
 2. Fill Out your profile details
@@ -28,7 +28,7 @@ Apply to your dream job with a powerful Cover Letter and a motivational message 
     3. One click to apply apply 📨
 6. Organize companies using kanban board
 
-# Installation
+## Installation
 
 ```bash
 composer install
@@ -50,7 +50,7 @@ php artisan queue:work
  php artisan serve 🚀
 ```
 
-# 🐳 Docker is ready
+## 🐳 Docker is ready
 
 ### Not meeting your machine requirements? No Problem!
 
@@ -58,7 +58,7 @@ php artisan queue:work
 ./vendor/bin/sail up
 ```
 
-# How to get email credentials
+## How to get email credentials
 
 To send emails from any web application, You have to get your email credentials from the service provider you use, for example:
 
@@ -81,7 +81,7 @@ To send emails from any web application, You have to get your email credentials 
 
 After you get your full configuration, Go to “Email Credentials” section and update your configuration.
 
-# How to get OpenAi Token
+## How to get OpenAi Token
 
 https://platform.openai.com/account/api-keys
 
