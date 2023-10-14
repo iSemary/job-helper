@@ -1,8 +1,3 @@
-<div style="display:flex; justify-content:space-around;margin-bottom:10px;">
-<img src="./public/assets/images/laravel.png" width="35px" height="35px" alt="laravel" />
-<img src="./public/assets/images/openai.png" width="45px" height="45px" alt="openai" />
-</div>
-
 # **The “All In One CRM” for Job Seekers**
 
 Ai not gonna take your job unless you start working with it! 🤖
