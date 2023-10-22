@@ -6,7 +6,7 @@ services:
             args:
                 WWWGROUP: '${WWWGROUP}'
         image: sail-8.2/app
-        command: 'composer install && php artisan migrate && php artisan storage:link && chmod -R 777 storage/{cache, sessions, views}'
+        command: 'composer install && php artisan migrate && php artisan storage:link && chmod -R 777 storage/framework/${cache, sessions, views}'
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
