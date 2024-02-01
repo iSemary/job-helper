@@ -86,6 +86,4 @@ After you get your full configuration, Go to “Email Credentials” section and
 https://platform.openai.com/account/api-keys
 
 -   Create a new secret key or use any existing key
--   Save your key into “Profile Details” Section 3. On click apply 📨
-
-6. Organize companies using kanban board
+-   Save your key into “Profile Details” Section.
